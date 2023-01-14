@@ -1,0 +1,49 @@
+{
+	"name": "gantt",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@babel/core": "^7.20.12",
+		"@babel/plugin-syntax-flow": "^7.18.6",
+		"@babel/plugin-transform-react-jsx": "^7.20.7",
+		"@testing-library/dom": "^8.19.1",
+		"@testing-library/jest-dom": "^5.16.5",
+		"@testing-library/react": "^13.4.0",
+		"@testing-library/user-event": "^13.5.0",
+		"@types/react": "^18.0.26",
+		"prop-types": "^15.8.1",
+		"react": "^18.2.0",
+		"react-archer": "^4.2.2",
+		"react-dom": "^18.2.0",
+		"react-draggable": "^4.4.5",
+		"react-scripts": "5.0.1",
+		"react-xarrows": "^2.0.2",
+		"typescript": "^4.9.4",
+		"web-vitals": "^2.1.4"
+	},
+	"scripts": {
+		"start": "PORT=3001 react-scripts --openssl-legacy-provider start",
+		"build": "react-scripts --openssl-legacy-provider build",
+		"test": "react-scripts test",
+		"json-server": "json-server --host 192.168.1.191 --watch ./data/db.json",
+		"eject": "react-scripts eject"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	}
+}
