@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import './GanttChart.css'
 import { useFetch } from '../../hooks/useFetch'
 
@@ -9,7 +9,7 @@ import Settings from './Settings'
 import Tasks from './Tasks'
 import TimeRange from './TimeRange'
 import TimeTable from './TimeTable'
-import Xarrow, { useXarrow, Xwrapper } from 'react-xarrows'
+import { Xwrapper } from 'react-xarrows'
 
 export default function GanttChart() {
 	let date = new Date()
@@ -40,37 +40,25 @@ export default function GanttChart() {
 	} = useFetch('http://192.168.1.191:3000/taskDurations')
 
 	useEffect(() => {
-		{
-			isPendingTasks && <div>Tasks loading...</div>
-		}
-		{
-			errorTasks && <div>{errorTasks}</div>
-		}
+		isPendingTasks && <div>Tasks loading...</div>
+		errorTasks && <div>{errorTasks}</div>
 
 		tasksData && setTasks(tasksData)
-	}, [tasksData])
+	}, [tasksData, isPendingTasks, errorTasks])
 
 	useEffect(() => {
-		{
-			isPendingArrowData && <div>Tasks loading...</div>
-		}
-		{
-			errorArrowData && <div>{errorArrowData}</div>
-		}
+		isPendingArrowData && <div>Tasks loading...</div>
+		errorArrowData && <div>{errorArrowData}</div>
 
 		arrowData && setArrows(arrowData)
-	}, [arrowData])
+	}, [arrowData, errorArrowData, isPendingArrowData])
 
 	useEffect(() => {
-		{
-			isPendingTaskDuration && <div>Tasks Duration loading...</div>
-		}
-		{
-			errorTaskDuration && <div>{errorTaskDuration}</div>
-		}
+		isPendingTaskDuration && <div>Tasks Duration loading...</div>
+		errorTaskDuration && <div>{errorTaskDuration}</div>
 
 		taskDurationsData && setTaskDurations(taskDurationsData)
-	}, [taskDurationsData])
+	}, [taskDurationsData, errorTaskDuration, isPendingTaskDuration])
 
 	return (
 		<div id='gantt-container'>

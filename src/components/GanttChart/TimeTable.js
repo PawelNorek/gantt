@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import './TimeTable.css'
 import {
 	monthDiff,
@@ -9,7 +9,7 @@ import {
 	dayDiff,
 } from '../../helpers/dateFunctions'
 import { months } from '../../constants'
-import Xarrow, { useXarrow, Xwrapper } from 'react-xarrows'
+import Xarrow, { Xwrapper } from 'react-xarrows'
 
 export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDurations, arrows }) {
 	// for dynamic css styling
@@ -61,7 +61,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 	let taskRow = []
 
 	function RenderArrows({ arrows }) {
-		const updateXarrow = useXarrow()
+		// const updateXarrow = useXarrow()
 		return arrows.map(arrow => {
 			// console.log('test', arrow.start, arrow.end)
 			return (
@@ -158,11 +158,6 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 							onDrop={onTaskDurationDrop}>
 							{taskDurations.map((el, i) => {
 								if (el?.task === task?.id && el?.start === formattedDate) {
-									// arrowRef.current.push(el?.id);
-									// console.log(arrowRef);
-									// const updateXarrow = useXarrow()
-									// console.log(`${el?.parent}`)
-
 									return (
 										<div
 											key={`${i}-${el?.id}`}
