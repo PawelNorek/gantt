@@ -1,32 +1,28 @@
-#time-range__container {
+.add_task_duration {
 	margin-right: 10px;
 	margin-bottom: 10px;
-	padding: 1rem;
 	border-radius: 5px;
 	box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.05);
 }
 
-#time-range__container > * {
+.fieldset_container {
 	display: flex;
 	align-items: center;
+	flex-direction: row;
+	flex-wrap: wrap;
 }
 
-#time-range {
+.fieldset {
 	display: flex;
 	align-items: center;
-	font-size: 14px;
-	margin: 0.75rem 0;
-}
-
-fieldset {
 	border: none;
-	padding: 0.5rem;
+	padding: 5px 7px;
 }
 
-fieldset label {
+.fieldset_label {
 	margin-right: 10px;
 }
 
-select {
-	margin-top: 0.5rem;
+.input[type='date'] {
+	padding: 10px 5px;
 }

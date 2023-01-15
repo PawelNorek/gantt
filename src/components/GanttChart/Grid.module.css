@@ -1,4 +1,4 @@
-#gantt-grid-container {
+.gantt_grid_container {
 	display: grid;
 	grid-template-columns: 150px 1fr;
 	outline: 2px solid var(--color-outline);

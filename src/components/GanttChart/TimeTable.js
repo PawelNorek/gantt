@@ -175,6 +175,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 										</div>
 									)
 								}
+								return ''
 							})}
 						</div>
 					)
