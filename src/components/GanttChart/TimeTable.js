@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './TimeTable.css'
+import styles from './TimeTable.module.css'
 import {
 	monthDiff,
 	getDaysInMonth,
@@ -245,7 +245,10 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 	// renderArrows(arrows)
 
 	return (
-		<div id='gantt-grid-container__time' style={{ gridTemplateColumns: `repeat(${numMonths}, 1fr)` }}>
+		<div
+			id='gantt-grid-container__time'
+			style={{ gridTemplateColumns: `repeat(${numMonths}, 1fr)` }}
+			className={styles.gantt_grid_container__time}>
 			{monthRows}
 			{dayRows}
 			{weekRows}
