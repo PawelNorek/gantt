@@ -10,3 +10,11 @@ Work to do:
 - At the moment this project is using mockup data. No backend connected. That must be solved at the later stage. I consider using tanstack query library. I will see how it goes. (https://tanstack.com/query/latest)
 - No data calculation done - to be added.
 - Some logic of adding/removing tasks must be added.
+
+If you want to try it steps are:
+- Clone repository
+- Install dependicies (pnpm install) (Use npm, yarn if you want. If you are here you know how to use it :).)
+- JSON server must be started first. It provides data so app can work without backend at the moment. You will find modified scripts included.
+- Start project itself using pnpm/npm start
+
+Have fun :)
