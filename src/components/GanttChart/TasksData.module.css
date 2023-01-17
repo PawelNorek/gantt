@@ -1,0 +1,26 @@
+.gantt_grid_container_tasks {
+	outline: 0.5px solid var(--color-outline);
+}
+
+.gantt_task_row {
+	display: flex;
+	outline: 0.5px solid var(--color-outline);
+	text-align: center;
+	height: var(--cell-height);
+	border: none;
+}
+
+.pre,
+.p {
+	width: 127px;
+	border: none;
+	outline: none;
+	background: none;
+}
+
+.table {
+	position: relative;
+	top: -2px;
+	font-size: small;
+	width: 100%;
+}

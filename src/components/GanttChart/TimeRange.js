@@ -1,5 +1,5 @@
 import { months } from '../../constants'
-import './TimeRange.css'
+import styles from './TimeRange.module.css'
 
 export default function TimeRange({ timeRange, setTimeRange }) {
 	// add date selector values
@@ -46,12 +46,17 @@ export default function TimeRange({ timeRange, setTimeRange }) {
 	}
 
 	return (
-		<div id='time-range__container'>
+		<div id='time-range__container' className={styles.time_range__container}>
 			<h2>Tracker Period</h2>
-			<div id='time-range'>
-				<fieldset id='select-from' style={{ paddingLeft: '0px' }}>
+			<div id='time-range' className={styles.time_range}>
+				<fieldset id='select-from' style={{ paddingLeft: '0px' }} className={styles.fieldset}>
 					<legend>From</legend>
-					<select id='from-select-month' name='from-select-month' value={timeRange.fromSelectMonth} onChange={onChange}>
+					<select
+						id='from-select-month'
+						name='from-select-month'
+						value={timeRange.fromSelectMonth}
+						onChange={onChange}
+						className={styles.select}>
 						{monthsOptions}
 					</select>
 					<select
@@ -59,14 +64,20 @@ export default function TimeRange({ timeRange, setTimeRange }) {
 						name='from-select-year'
 						value={timeRange.fromSelectYear}
 						onChange={onChange}
-						style={{ marginLeft: '5px' }}>
+						style={{ marginLeft: '5px' }}
+						className={styles.select}>
 						{yearsOptions}
 					</select>
 				</fieldset>
 
-				<fieldset id='select-to'>
+				<fieldset id='select-to' className={styles.fieldset}>
 					<legend>To</legend>
-					<select id='to-select-month' name='to-select-month' value={timeRange.toSelectMonth} onChange={onChange}>
+					<select
+						id='to-select-month'
+						name='to-select-month'
+						value={timeRange.toSelectMonth}
+						onChange={onChange}
+						className={styles.select}>
 						{monthsOptions}
 					</select>
 					<select
@@ -74,7 +85,8 @@ export default function TimeRange({ timeRange, setTimeRange }) {
 						name='to-select-year'
 						value={timeRange.toSelectYear}
 						onChange={onChange}
-						style={{ marginLeft: '5px' }}>
+						style={{ marginLeft: '5px' }}
+						className={styles.select}>
 						{yearsOptions}
 					</select>
 				</fieldset>

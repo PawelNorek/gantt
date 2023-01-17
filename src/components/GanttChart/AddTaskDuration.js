@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import AddButton from './AddButton'
-import './AddTaskDuration.css'
+import styles from './AddTaskDuration.module.css'
 
 export default function AddTaskDuration({ tasks, setTaskDurations }) {
 	const [task, setTask] = useState('')
@@ -40,11 +40,13 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
 	}
 
 	return (
-		<form id='add-task-duration' onSubmit={handleSubmit}>
+		<form id='add-task-duration' onSubmit={handleSubmit} className={styles.add_task_duration}>
 			<h2>Add Task Duration</h2>
 			<div className='inner-form-container'>
-				<fieldset id='task' style={{ paddingLeft: '0px' }}>
-					<label htmlFor='select-task'>Which task?</label>
+				<fieldset id='task' style={{ paddingLeft: '0px' }} className={styles.fieldset}>
+					<label htmlFor='select-task' className={styles.fieldset_label}>
+						Which task?
+					</label>
 					<select id='select-task' name='select-task' onChange={onChange} value={task}>
 						<option disabled defaultValue value=''>
 							select a task
@@ -58,9 +60,11 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
 						{}
 					</select>
 				</fieldset>
-				<fieldset id='date'>
-					<div className='fieldset-container'>
-						<label htmlFor='start-date'>Start date:</label>
+				<fieldset id='date' className={styles.fieldset}>
+					<div className={styles.fieldset_container}>
+						<label htmlFor='start-date' className={styles.fieldset_label}>
+							Start date:
+						</label>
 						<input
 							type='date'
 							id='start-date'
@@ -69,10 +73,13 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
 							min='2022-01-01'
 							max='2050-12-31'
 							onChange={onChange}
+							className={styles.input}
 						/>
 					</div>
-					<div className='fieldset-container' style={{ marginLeft: '10px' }}>
-						<label htmlFor='end-date'>End date:</label>
+					<div style={{ marginLeft: '10px' }} className={styles.fieldset_container}>
+						<label htmlFor='end-date' className={styles.fieldset_label}>
+							End date:
+						</label>
 						<input
 							type='date'
 							id='end-date'
@@ -81,6 +88,7 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
 							min='2022-01-01'
 							max='2050-12-31'
 							onChange={onChange}
+							className={styles.input}
 						/>
 					</div>
 				</fieldset>

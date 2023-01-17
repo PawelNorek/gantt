@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import AddButton from './AddButton'
-import './AddTask.css'
+import styles from './AddTask.module.css'
 
 export default function AddTask({ setTasks }) {
 	const [task, setTask] = useState('')
@@ -30,9 +30,9 @@ export default function AddTask({ setTasks }) {
 	}
 
 	return (
-		<form id='add-task' onSubmit={handleSubmit}>
+		<form id='add-task' onSubmit={handleSubmit} className={styles.add_task}>
 			<h2>Add Task</h2>
-			<input value={task} onChange={onChange} placeholder='add task name' />
+			<input value={task} onChange={onChange} placeholder='add task name' className={styles.input} />
 			<AddButton />
 		</form>
 	)

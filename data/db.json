@@ -2,43 +2,38 @@
 	"tasks": [
 		{
 			"id": 1,
-			"name": "Task 1",
-			"value": 124
+			"name": "Project 1",
+			"value": 352000
 		},
 		{
 			"id": 2,
-			"name": "Task 2",
-			"value": 1244
+			"name": "Project - part 1",
+			"value": 352000
 		},
 		{
 			"id": 3,
-			"name": "Task 3",
-			"value": 1245
+			"name": "Project - part 2",
+			"value": 0
 		},
 		{
 			"id": 4,
-			"name": "Task 4",
-			"value": 1246
+			"name": "Project - part 3",
+			"value": 0
 		},
 		{
 			"id": 5,
-			"name": "Task 5",
-			"value": 1247
+			"name": "Project - part 4",
+			"value": 0
 		},
 		{
 			"id": 6,
-			"name": "Task 6",
-			"value": 1248
+			"name": "Projekt 2",
+			"value": 0
 		},
 		{
 			"id": 7,
-			"name": "Task 7",
-			"value": 1249
-		},
-		{
-			"id": 8,
-			"name": "Task 8",
-			"value": 1240
+			"name": "Project - bonus",
+			"value": 0
 		}
 	],
 	"taskDurations": [

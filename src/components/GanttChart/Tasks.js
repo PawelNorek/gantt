@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import './Tasks.css'
+import styles from './Tasks.module.css'
 
 export default function Tasks({ tasks, setTasks, setTaskDurations }) {
 	const inputRef = useRef([])
@@ -43,23 +43,27 @@ export default function Tasks({ tasks, setTasks, setTaskDurations }) {
 	//   console.log(tasks.tasks);
 	// }
 	return (
-		<div id='gantt-grid-container__tasks'>
-			<div className='gantt-task-row'></div>
-			<div className='gantt-task-row'></div>
-			<div className='gantt-task-row'></div>
+		<div id='gantt-grid-container__tasks' className={styles.gantt_grid_container_tasks}>
+			<div className={styles.gantt_task_row}></div>
+			<div className={styles.gantt_task_row}></div>
+			<div className={styles.gantt_task_row}></div>
+			<div className={styles.gantt_task_row}>Income</div>
+			<div className={styles.gantt_task_row}>Income Plan vs Real</div>
+			<div className={styles.gantt_task_row}>Real</div>
+			<div className={styles.gantt_task_row}>Income total</div>
 			{tasks &&
 				tasks.map((tsk, i) => (
-					<div key={`${i}-${tsk?.id}-${tsk.name}`} className='gantt-task-row'>
+					<div key={`${i}-${tsk?.id}-${tsk.name}`} className={styles.gantt_task_row}>
 						<input
 							ref={el => (inputRef.current[i] = el)}
 							onChange={e => onChange(e, i)}
 							data-task-id={tsk?.id}
 							value={tsk?.name}
+							className={styles.input}
 						/>
-						<button onClick={handleDelete} type='button' data-task-id={tsk?.id}>
+						<button onClick={handleDelete} type='button' data-task-id={tsk?.id} className={styles.button}>
 							x
 						</button>
-						<p className='gantt-task-row'>{tsk?.value}</p>
 					</div>
 				))}
 		</div>
