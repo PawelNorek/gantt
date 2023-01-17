@@ -7,6 +7,7 @@ import AddTask from './AddTask'
 import Grid from './Grid'
 import Settings from './Settings'
 import Tasks from './Tasks'
+import TasksData from './TasksData'
 import TimeRange from './TimeRange'
 import TimeTable from './TimeTable'
 import { Xwrapper } from 'react-xarrows'
@@ -65,6 +66,7 @@ export default function GanttChart() {
 			<Grid>
 				<Xwrapper>
 					<Tasks tasks={tasks} setTasks={setTasks} setTaskDurations={setTaskDurations} />
+					<TasksData tasks={tasks} setTasks={setTasks} setTaskDurations={setTaskDurations} />
 					<TimeTable
 						timeRange={timeRange}
 						tasks={tasks}

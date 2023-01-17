@@ -47,6 +47,10 @@ export default function Tasks({ tasks, setTasks, setTaskDurations }) {
 			<div className={styles.gantt_task_row}></div>
 			<div className={styles.gantt_task_row}></div>
 			<div className={styles.gantt_task_row}></div>
+			<div className={styles.gantt_task_row}>Income</div>
+			<div className={styles.gantt_task_row}>Income Plan vs Real</div>
+			<div className={styles.gantt_task_row}>Real</div>
+			<div className={styles.gantt_task_row}>Income total</div>
 			{tasks &&
 				tasks.map((tsk, i) => (
 					<div key={`${i}-${tsk?.id}-${tsk.name}`} className={styles.gantt_task_row}>
@@ -60,7 +64,6 @@ export default function Tasks({ tasks, setTasks, setTaskDurations }) {
 						<button onClick={handleDelete} type='button' data-task-id={tsk?.id} className={styles.button}>
 							x
 						</button>
-						<p className={styles.p}>{tsk?.value}</p>
 					</div>
 				))}
 		</div>

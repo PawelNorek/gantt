@@ -22,3 +22,8 @@
 .dragging {
 	opacity: 0.5;
 }
+
+.calculation_row {
+	height: var(--cell-height);
+	outline: 0.5px solid var(--color-outline);
+}
