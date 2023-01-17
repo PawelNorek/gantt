@@ -85,10 +85,26 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 			</div>
 		)
 
-		incomeRow.push(<div className={styles.calculation_row}>Icome TBD</div>)
-		plan_vs_realRow.push(<div className={styles.calculation_row}>Icome Plan vs Real TBD</div>)
-		realRow.push(<div className={styles.calculation_row}>Real TBD</div>)
-		incomeTotalRow.push(<div className={styles.calculation_row}>Icome total TBD</div>)
+		incomeRow.push(
+			<div key={i} className={styles.calculation_row}>
+				Icome TBD
+			</div>
+		)
+		plan_vs_realRow.push(
+			<div key={i} className={styles.calculation_row}>
+				Icome Plan vs Real TBD
+			</div>
+		)
+		realRow.push(
+			<div key={i} className={styles.calculation_row}>
+				Real TBD
+			</div>
+		)
+		incomeTotalRow.push(
+			<div key={i} className={styles.calculation_row}>
+				Icome total TBD
+			</div>
+		)
 
 		// create day and week rows
 		const numDays = getDaysInMonth(month.getFullYear(), month.getMonth() + 1)
