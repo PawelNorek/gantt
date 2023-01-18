@@ -13,7 +13,6 @@ Work to do:
 - Some logic of adding/removing tasks must be added.
 
 If you want to try it steps are:
-
 - Clone repository
 - Install dependicies (pnpm install) (Use npm, yarn if you want. If you are here you know how to use it :).)
 - JSON server must be started first. It provides data so app can work without backend at the moment. You will find modified scripts included.
