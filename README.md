@@ -13,9 +13,14 @@ Work to do:
 - Some logic of adding/removing tasks must be added.
 
 If you want to try it steps are:
+
 - Clone repository
 - Install dependicies (pnpm install) (Use npm, yarn if you want. If you are here you know how to use it :).)
 - JSON server must be started first. It provides data so app can work without backend at the moment. You will find modified scripts included.
+
+!!!There was a bug as IP for mock data fetch was hard coded in one of components. Before you start the projec change IP of your JSON server in settings.js file.
+Replace value for host with whatever is on your end. It may be IP (including port) or domain name.
+
 - Start project itself using pnpm/npm start
 
 Have fun :)
