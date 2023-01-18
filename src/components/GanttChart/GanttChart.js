@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './GanttChart.css'
 import { useFetch } from '../../hooks/useFetch'
+import settings from '../../settings'
 
 import AddTaskDuration from './AddTaskDuration'
 import AddTask from './AddTask'
@@ -26,19 +27,19 @@ export default function GanttChart() {
 	})
 	const [arrows, setArrows] = useState([])
 
-	const { data: tasksData, isPending: isPendingTasks, error: errorTasks } = useFetch('http://192.168.1.191:3000/tasks')
+	const { data: tasksData, isPending: isPendingTasks, error: errorTasks } = useFetch(`http://${settings.host}/tasks`)
 
 	const {
 		data: arrowData,
 		isPending: isPendingArrowData,
 		error: errorArrowData,
-	} = useFetch('http://192.168.1.191:3000/arrows')
+	} = useFetch(`http://${settings.host}/arrows`)
 
 	const {
 		data: taskDurationsData,
 		isPending: isPendingTaskDuration,
 		error: errorTaskDuration,
-	} = useFetch('http://192.168.1.191:3000/taskDurations')
+	} = useFetch(`http://${settings.host}/taskDurations`)
 
 	useEffect(() => {
 		isPendingTasks && <div>Tasks loading...</div>
