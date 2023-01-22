@@ -27,6 +27,7 @@
 	transition: all 0.2s ease;
 }
 
+.button:hover,
 .button:focus {
 	outline: none;
 	transform: scale(1.3);

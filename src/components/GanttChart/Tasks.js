@@ -62,7 +62,7 @@ export default function Tasks({ tasks, setTasks, setTaskDurations }) {
 							className={styles.input}
 						/>
 						<button onClick={handleDelete} type='button' data-task-id={tsk?.id} className={styles.button}>
-							x
+							X
 						</button>
 					</div>
 				))}

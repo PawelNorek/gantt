@@ -11,7 +11,6 @@ import Tasks from './Tasks'
 import TasksData from './TasksData'
 import TimeRange from './TimeRange'
 import TimeTable from './TimeTable'
-import { Xwrapper } from 'react-xarrows'
 
 export default function GanttChart() {
 	let date = new Date()
@@ -64,21 +63,20 @@ export default function GanttChart() {
 
 	return (
 		<div id='gantt-container'>
+			<h1 className='title' onMouseDown={e => e.preventDefault(e)}>
+				Gantt Tracker
+			</h1>
 			<Grid>
-				<Xwrapper>
-					<Tasks tasks={tasks} setTasks={setTasks} setTaskDurations={setTaskDurations} />
-					<TasksData tasks={tasks} setTasks={setTasks} setTaskDurations={setTaskDurations} />
-					<TimeTable
-						timeRange={timeRange}
-						tasks={tasks}
-						taskDurations={taskDurations}
-						setTaskDurations={setTaskDurations}
-						arrows={arrows}
-					/>
-					{/* {tasks && <Xarrow start="0-1" end="2-3" />} */}
-				</Xwrapper>
+				<Tasks tasks={tasks} setTasks={setTasks} setTaskDurations={setTaskDurations} />
+				<TasksData tasks={tasks} setTasks={setTasks} setTaskDurations={setTaskDurations} />
+				<TimeTable
+					timeRange={timeRange}
+					tasks={tasks}
+					taskDurations={taskDurations}
+					setTaskDurations={setTaskDurations}
+					arrows={arrows}
+				/>
 			</Grid>
-			{/* {console.log(tasks)} */}
 			<Settings>
 				<AddTask setTasks={setTasks} />
 				<AddTaskDuration tasks={tasks} setTaskDurations={setTaskDurations} />
