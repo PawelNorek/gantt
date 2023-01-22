@@ -5,11 +5,10 @@ import {
 	getDaysInMonth,
 	getDayOfWeek,
 	createFormattedDateFromStr,
-	createFormattedDateFromDate,
 	dayDiff,
 } from '../../helpers/dateFunctions'
 import { months } from '../../constants'
-import Xarrow, { Xwrapper } from 'react-xarrows'
+import Xarrow from 'react-xarrows'
 
 export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDurations, arrows }) {
 	// for dynamic css styling
@@ -33,7 +32,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 	}
 
 	const taskDuration = {
-		position: 'absolute',
+		position: 'relative',
 		height: 'calc(var(--cell-height) - 1px)',
 		zIndex: '1',
 		background: 'linear-gradient(90deg, var(--color-primary-light) 0%, var(--color-primary-dark) 100%)',
@@ -48,9 +47,11 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 	const numMonths = monthDiff(startMonth, endMonth) + 1
 	let month = new Date(startMonth)
 
-	const [taskDurationElDraggedId, setTaskDurationElDraggedId] = useState(null)
-
-	// const updateXarrow = useXarrow()
+	const [taskDurationUnderMouseId, setTaskDurationUnderMouseId] = useState(null)
+	const [manipulationModeOn, setManipulationModeOn] = useState(0)
+	const [taskData, setTaskData] = useState([])
+	const [leftManipulation, setLeftManipulation] = useState(false)
+	const [rightManipulation, setRightManipulation] = useState(false)
 
 	let monthRows = []
 	let dayRows = []
@@ -65,17 +66,12 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 	let incomeTotalRow = []
 
 	function RenderArrows({ arrows }) {
-		// const updateXarrow = useXarrow()
 		return arrows.map(arrow => {
-			// console.log('test', arrow.start, arrow.end)
 			return (
 				<Xarrow key={arrow.id} start={arrow.start} end={arrow.end} startAnchor='bottom' endAnchor='left' path='grid' />
 			)
-			// return <div>test</div>
 		})
 	}
-
-	// RenderArrows(arrows)
 
 	for (let i = 0; i < numMonths; i++) {
 		// create month rows
@@ -144,17 +140,6 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 		month.setMonth(month.getMonth() + 1)
 	}
 
-	// const DraggableBox = ({ box }) => {
-	// 	const updateXarrow = useXarrow()
-	// 	return (
-	// 		<Draggable onDrag={updateXarrow} onStop={updateXarrow}>
-	// 			<div id={box.id} style={{ ...boxStyle, position: 'absolute', left: box.x, top: box.y }}>
-	// 				{box.id}
-	// 			</div>
-	// 		</Draggable>
-	// 	)
-	// }
-
 	// create task rows
 	if (tasks) {
 		tasks.forEach(task => {
@@ -171,40 +156,94 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 					// add task and date data attributes
 					const formattedDate = createFormattedDateFromStr(curYear, curMonth, j)
 
-					taskRow.push(
-						<div
-							key={`${task.id}-${j}`}
-							style={{
-								...ganttTimePeriodCell,
-								backgroundColor: dayOfTheWeek === 'S' ? 'var(--color-tertiary)' : '#fff',
-							}}
-							data-task={task?.id}
-							data-date={formattedDate}
-							onDrop={onTaskDurationDrop}>
-							{taskDurations.map((el, i) => {
-								if (el?.task === task?.id && el?.start === formattedDate) {
-									return (
-										<div
-											key={`${i}-${el?.id}`}
-											id={`${el?.id}`}
-											draggable='true'
-											tabIndex='0'
-											onDragStart={() => handleDragStart(el?.id)}
-											style={{
-												...taskDuration,
-												width: `calc(${dayDiff(el?.start, el?.end)} * 100% - 1px)`,
-												opacity: taskDurationElDraggedId === el?.id ? '0.5' : '1',
-											}}
-											onKeyDown={e => deleteTaskDuration(e, el?.id)}>
-											<RenderArrows arrows={arrows} />
-										</div>
-									)
-								}
-								return ''
-							})}
-						</div>
-					)
+					if (manipulationModeOn === task?.id) {
+						if (taskData[0] <= formattedDate && taskData[1] >= formattedDate) {
+							taskRow.push(
+								<div
+									key={`${task.id}-${j}`}
+									style={{
+										...ganttTimePeriodCell,
+										backgroundColor: 'rgb(200, 200, 200)',
+									}}
+									data-task={task?.id}
+									data-date={formattedDate}
+									onMouseEnter={handleDivMouseEnter}
+									onMouseUp={e => handleMouseUp(e)}></div>
+							)
+						} else {
+							taskRow.push(
+								<div
+									key={`${task.id}-${j}`}
+									style={{
+										...ganttTimePeriodCell,
+										backgroundColor: dayOfTheWeek === 'S' ? 'var(--color-tertiary)' : '#fff',
+									}}
+									data-task={task?.id}
+									data-date={formattedDate}
+									onMouseEnter={handleDivMouseEnter}
+									onMouseUp={e => handleMouseUp(e)}></div>
+							)
+						}
+					} else {
+						taskRow.push(
+							<div
+								key={`${task.id}-${j}`}
+								style={{
+									...ganttTimePeriodCell,
+									backgroundColor: dayOfTheWeek === 'S' ? 'var(--color-tertiary)' : '#fff',
+								}}
+								data-task={task?.id}
+								data-date={formattedDate}
+								onMouseEnter={handleDivMouseEnter}
+								onMouseUp={e => handleMouseUp(e)}>
+								{taskDurations.map((el, i) => {
+									if (el?.task === task?.id && el?.start === formattedDate && el?.task !== manipulationModeOn) {
+										return (
+											<div
+												key={`${i}-${el?.id}`}
+												id={`${el?.id}`}
+												tabIndex='0'
+												style={{
+													...taskDuration,
+													width: `calc(${dayDiff(el?.start, el?.end)} * 100% - 1px)`,
+												}}
+												onKeyDown={e => deleteTaskDuration(e, el?.id)}
+												onMouseEnter={e => {
+													setTaskDurationUnderMouseId(el?.id)
+												}}
+												onMouseLeave={e => {
+													setTaskDurationUnderMouseId(null)
+												}}>
+												{taskDurationUnderMouseId === el?.id && (
+													<div
+														className={styles.left_box}
+														onMouseDown={e => {
+															setTaskData([el?.start, el?.end])
+															setLeftManipulation(true)
+															setManipulationModeOn(task?.id)
+														}}></div>
+												)}
+												{taskDurationUnderMouseId === el?.id && (
+													<div
+														className={styles.right_box}
+														onMouseDown={e => {
+															setRightManipulation(true)
+															setTaskData([el?.start, el?.end])
+															setManipulationModeOn(task?.id)
+														}}></div>
+												)}
+											</div>
+										)
+									}
+									return ''
+								})}
+								{i === 0 && j === 1 && manipulationModeOn === 0 && <RenderArrows arrows={arrows} />}
+							</div>
+						)
+					}
 				}
+
+				// console.log(taskRow)
 
 				taskRows.push(
 					<div key={`${i}-${task?.id}`} style={ganttTimePeriod}>
@@ -227,47 +266,59 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 		}
 	}
 
-	function handleDragStart(taskDurationId) {
-		console.log(taskDurationId)
-		setTaskDurationElDraggedId(taskDurationId)
-	}
+	function handleMouseUp(e) {
+		//manipulationModeOn holds information about task where mouse button was pressed down
+		if (manipulationModeOn !== 0) {
+			const taskDuration = taskDurations.filter(taskDuration => taskDuration.task === manipulationModeOn)[0]
 
-	function onTaskDurationDrop(e) {
-		const targetCell = e.target
-		// prevent adding on another taskDuration
-		if (!targetCell.hasAttribute('draggable')) {
-			// find task
-			const taskDuration = taskDurations.filter(taskDuration => taskDuration.id === taskDurationElDraggedId)[0]
-
-			const dataTask = targetCell.getAttribute('data-task')
-			const dataDate = targetCell.getAttribute('data-date')
-
-			const daysDuration = dayDiff(taskDuration.start, taskDuration.end)
+			const daysDuration = dayDiff(taskData[0], taskData[1])
 
 			// get new task values
 			// get start, calc end using daysDuration - make Date objects - change taskDurations
-			const newTask = parseInt(dataTask)
-			const newStartDate = new Date(dataDate)
-			let newEndDate = new Date(dataDate)
+
+			// const newTask = parseInt(task)
+			// const newStartDate = new Date(taskData[0])
+			let newEndDate = new Date(taskData[1])
 			newEndDate.setDate(newEndDate.getDate() + daysDuration - 1)
 
 			// update taskDurations
-			taskDuration.task = newTask
-			taskDuration.start = createFormattedDateFromDate(newStartDate)
-			taskDuration.end = createFormattedDateFromDate(newEndDate)
+			taskDuration.task = manipulationModeOn
+			taskDuration.start = taskData[0]
+			taskDuration.end = taskData[1]
 
-			const newTaskDurations = taskDurations.filter(taskDuration => taskDuration.id !== taskDurationElDraggedId)
+			const newTaskDurations = taskDurations.filter(taskDuration => taskDuration.task !== manipulationModeOn)
 			newTaskDurations.push(taskDuration)
 
 			// update state (if data on backend - make API request to update data)
 			setTaskDurations(newTaskDurations)
+
+			// console.log(taskDurations)
+
+			setManipulationModeOn(0)
+			setLeftManipulation(false)
+			setRightManipulation(false)
 		}
-		setTaskDurationElDraggedId(null)
-		// console.log('dropped')
-		// window.location.reload();
 	}
 
-	// renderArrows(arrows)
+	function handleDivMouseEnter(e) {
+		const targetCell = e.target
+		// console.log(targetCell)
+		// prevent adding on another taskDuration
+		// find task
+		// const taskDuration = taskDurations.filter(taskDuration => taskDuration.id === taskDurationElDraggedId)[0]
+
+		// const dataTask = targetCell.getAttribute('data-task')
+		const dataDate = targetCell.getAttribute('data-date')
+
+		// const daysDuration = dayDiff(taskDuration.start, taskDuration.end)
+		// console.log(dataTask, dataDate)
+		if (rightManipulation && dataDate > taskData[0]) {
+			setTaskData([taskData[0], dataDate])
+		}
+		if (leftManipulation && dataDate < taskData[1]) {
+			setTaskData([dataDate, taskData[1]])
+		}
+	}
 
 	return (
 		<div
@@ -282,19 +333,16 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 			{realRow}
 			{incomeTotalRow}
 
-			<Xwrapper>
-				<div
-					id='gantt-time-period-cell-container'
-					onDragOver={e => e.preventDefault()}
-					style={{
-						gridColumn: '1/-1',
-						display: 'grid',
-						gridTemplateColumns: `repeat(${numMonths}, 1fr)`,
-						paddingLeft: '0.5px',
-					}}>
-					{taskRows}
-				</div>
-			</Xwrapper>
+			<div
+				id='gantt-time-period-cell-container'
+				style={{
+					gridColumn: '1/-1',
+					display: 'grid',
+					gridTemplateColumns: `repeat(${numMonths}, 1fr)`,
+					paddingLeft: '0.5px',
+				}}>
+				{taskRows}
+			</div>
 		</div>
 	)
 }
