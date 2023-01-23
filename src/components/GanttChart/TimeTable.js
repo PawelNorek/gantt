@@ -141,7 +141,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 	}
 
 	// create task rows
-	if (tasks) {
+	if (tasks && taskDurations && arrows) {
 		tasks.forEach(task => {
 			let mnth = new Date(startMonth)
 			for (let i = 0; i < numMonths; i++) {

@@ -55,7 +55,8 @@ export default function GanttChart() {
 	return (
 		<div id='gantt-container'>
 			{(isPendingArrowData || isPendingTaskDuration || isPendingTasks) && <div>Loading</div>}
-			{!isPendingArrowData && !isPendingTaskDuration && !isPendingTasks && (
+			{(errorTasks || errorArrowData || errorTaskDuration) && <div>{errorTasks}</div>}
+			{tasksData && arrowData && taskDurationsData && (
 				<>
 					<h1 className='title' onMouseDown={e => e.preventDefault(e)}>
 						Gantt Tracker
