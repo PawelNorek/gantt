@@ -2,36 +2,43 @@
 	"tasks": [
 		{
 			"id": 1,
+			"task": 1,
 			"name": "Project 1",
 			"value": 352000
 		},
 		{
 			"id": 2,
+			"task": 2,
 			"name": "Project - part 1",
 			"value": 352000
 		},
 		{
 			"id": 3,
+			"task": 3,
 			"name": "Project - part 2",
 			"value": 0
 		},
 		{
 			"id": 4,
+			"task": 4,
 			"name": "Project - part 3",
 			"value": 0
 		},
 		{
 			"id": 5,
+			"task": 5,
 			"name": "Project - part 4",
 			"value": 0
 		},
 		{
 			"id": 6,
+			"task": 6,
 			"name": "Projekt 2",
 			"value": 0
 		},
 		{
 			"id": 7,
+			"task": 7,
 			"name": "Project - bonus",
 			"value": 0
 		}
