@@ -27,6 +27,7 @@
 		"json-server": "json-server --host 192.168.1.191 --port 4000 --watch ./data/db.json",
 		"eject": "react-scripts eject"
 	},
+	"homepage": ".",
 	"eslintConfig": {
 		"extends": [
 			"react-app",

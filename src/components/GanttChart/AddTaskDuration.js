@@ -53,7 +53,7 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
 						</option>
 						{tasks &&
 							tasks.map(tsk => (
-								<option key={tsk?.id} value={tsk?.id}>
+								<option key={tsk?.Id} value={tsk?.Id}>
 									{tsk?.name}
 								</option>
 							))}

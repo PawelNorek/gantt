@@ -47,7 +47,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 	const numMonths = monthDiff(startMonth, endMonth) + 1
 	let month = new Date(startMonth)
 
-	const [taskDurationUnderMouseId, setTaskDurationUnderMouseId] = useState(null)
+	const [taskDurationUnderMouseid, setTaskDurationUnderMouseid] = useState(null)
 	const [manipulationModeOn, setManipulationModeOn] = useState(0)
 	const [taskData, setTaskData] = useState([])
 	const [leftManipulation, setLeftManipulation] = useState(false)
@@ -68,7 +68,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 	function RenderArrows({ arrows }) {
 		return arrows.map(arrow => {
 			return (
-				<Xarrow key={arrow.id} start={arrow.start} end={arrow.end} startAnchor='bottom' endAnchor='left' path='grid' />
+				<Xarrow key={arrow.Id} start={arrow.start} end={arrow.end} startAnchor='bottom' endAnchor='left' path='grid' />
 			)
 		})
 	}
@@ -156,16 +156,16 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 					// add task and date data attributes
 					const formattedDate = createFormattedDateFromStr(curYear, curMonth, j)
 
-					if (manipulationModeOn === task?.id) {
+					if (manipulationModeOn === task?.Id) {
 						if (taskData[0] <= formattedDate && taskData[1] >= formattedDate) {
 							taskRow.push(
 								<div
-									key={`${task.id}-${j}`}
+									key={`${task.Id}-${j}`}
 									style={{
 										...ganttTimePeriodCell,
 										backgroundColor: 'rgb(200, 200, 200)',
 									}}
-									data-task={task?.id}
+									data-task={task?.Id}
 									data-date={formattedDate}
 									onMouseEnter={handleDivMouseEnter}
 									onMouseUp={e => handleMouseUp(e)}></div>
@@ -173,12 +173,12 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 						} else {
 							taskRow.push(
 								<div
-									key={`${task.id}-${j}`}
+									key={`${task.Id}-${j}`}
 									style={{
 										...ganttTimePeriodCell,
 										backgroundColor: dayOfTheWeek === 'S' ? 'var(--color-tertiary)' : '#fff',
 									}}
-									data-task={task?.id}
+									data-task={task?.Id}
 									data-date={formattedDate}
 									onMouseEnter={handleDivMouseEnter}
 									onMouseUp={e => handleMouseUp(e)}></div>
@@ -187,49 +187,49 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 					} else {
 						taskRow.push(
 							<div
-								key={`${task.id}-${j}`}
+								key={`${task.Id}-${j}`}
 								style={{
 									...ganttTimePeriodCell,
 									backgroundColor: dayOfTheWeek === 'S' ? 'var(--color-tertiary)' : '#fff',
 								}}
-								data-task={task?.id}
+								data-task={task?.Id}
 								data-date={formattedDate}
 								onMouseEnter={handleDivMouseEnter}
 								onMouseUp={e => handleMouseUp(e)}>
 								{taskDurations.map((el, i) => {
-									if (el?.task === task?.id && el?.start === formattedDate && el?.task !== manipulationModeOn) {
+									if (el?.task === task?.Id && el?.start === formattedDate && el?.task !== manipulationModeOn) {
 										return (
 											<div
-												key={`${i}-${el?.id}`}
-												id={`${el?.id}`}
+												key={`${i}-${el?.Id}`}
+												id={`${el?.Id}`}
 												tabIndex='0'
 												style={{
 													...taskDuration,
 													width: `calc(${dayDiff(el?.start, el?.end)} * 100% - 1px)`,
 												}}
-												onKeyDown={e => deleteTaskDuration(e, el?.id)}
+												onKeyDown={e => deleteTaskDuration(e, el?.Id)}
 												onMouseEnter={e => {
-													setTaskDurationUnderMouseId(el?.id)
+													setTaskDurationUnderMouseid(el?.Id)
 												}}
 												onMouseLeave={e => {
-													setTaskDurationUnderMouseId(null)
+													setTaskDurationUnderMouseid(null)
 												}}>
-												{taskDurationUnderMouseId === el?.id && (
+												{taskDurationUnderMouseid === el?.Id && (
 													<div
 														className={styles.left_box}
 														onMouseDown={e => {
 															setTaskData([el?.start, el?.end])
 															setLeftManipulation(true)
-															setManipulationModeOn(task?.id)
+															setManipulationModeOn(task?.Id)
 														}}></div>
 												)}
-												{taskDurationUnderMouseId === el?.id && (
+												{taskDurationUnderMouseid === el?.Id && (
 													<div
 														className={styles.right_box}
 														onMouseDown={e => {
 															setRightManipulation(true)
 															setTaskData([el?.start, el?.end])
-															setManipulationModeOn(task?.id)
+															setManipulationModeOn(task?.Id)
 														}}></div>
 												)}
 											</div>
@@ -246,7 +246,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 				// console.log(taskRow)
 
 				taskRows.push(
-					<div key={`${i}-${task?.id}`} style={ganttTimePeriod}>
+					<div key={`${i}-${task?.Id}`} style={ganttTimePeriod}>
 						{taskRow}
 					</div>
 				)
@@ -257,10 +257,10 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 		})
 	}
 
-	function deleteTaskDuration(e, id) {
+	function deleteTaskDuration(e, Id) {
 		if (e.key === 'Delete' || e.key === 'Backspace') {
 			// update taskDurations
-			const newTaskDurations = taskDurations.filter(taskDuration => taskDuration.id !== id)
+			const newTaskDurations = taskDurations.filter(taskDuration => taskDuration.Id !== Id)
 			// update state (if data on backend - make API request to update data)
 			setTaskDurations(newTaskDurations)
 		}
@@ -305,7 +305,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 		// console.log(targetCell)
 		// prevent adding on another taskDuration
 		// find task
-		// const taskDuration = taskDurations.filter(taskDuration => taskDuration.id === taskDurationElDraggedId)[0]
+		// const taskDuration = taskDurations.filter(taskDuration => taskDuration.id === taskDurationElDraggedid)[0]
 
 		// const dataTask = targetCell.getAttribute('data-task')
 		const dataDate = targetCell.getAttribute('data-date')

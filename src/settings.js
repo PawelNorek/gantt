@@ -1,5 +1,5 @@
 const settings = {
-	host: '192.168.1.191:4000',
+	host: 'nocodb.4nol74.cloud',
 }
 
 export default settings

@@ -22,7 +22,7 @@ export default function TasksData({ tasks }) {
 			<div className={styles.gantt_task_row}>TBD</div>
 			{tasks &&
 				tasks.map((tsk, i) => (
-					<div key={`${i}-${tsk?.id}-${tsk.name}`} className={styles.gantt_task_row}>
+					<div key={`${i}-${tsk?.Id}-${tsk.name}`} className={styles.gantt_task_row}>
 						<table className={styles.table}>
 							<tbody>
 								<tr>

@@ -7,7 +7,7 @@ export default function Tasks({ tasks, setTasks, setTaskDurations }) {
 
 	function handleDelete(e) {
 		const idNum = parseInt(e.target.getAttribute('data-task-id'))
-		const newTasks = tasks.filter(task => task.id !== idNum)
+		const newTasks = tasks.filter(task => task.Id !== idNum)
 		// update state (if data on backend - make API request to update data)
 		setTasks(newTasks)
 
@@ -22,11 +22,11 @@ export default function Tasks({ tasks, setTasks, setTaskDurations }) {
 		const { value } = e.target
 		const idNum = parseInt(e.target.getAttribute('data-task-id'))
 
-		let newTasks = tasks.filter(task => task.id !== idNum)
+		let newTasks = tasks.filter(task => task.Id !== idNum)
 
 		indexRef.current = i
-		newTasks.push({ id: idNum, name: value })
-		newTasks = newTasks.sort((a, b) => a.id - b.id)
+		newTasks.push({ Id: idNum, name: value })
+		newTasks = newTasks.sort((a, b) => a.Id - b.Id)
 		// update state (if data on backend - make API request to update data)
 		setTasks(newTasks)
 	}
@@ -53,15 +53,15 @@ export default function Tasks({ tasks, setTasks, setTaskDurations }) {
 			<div className={styles.gantt_task_row}>Income total</div>
 			{tasks &&
 				tasks.map((tsk, i) => (
-					<div key={`${i}-${tsk?.id}-${tsk.name}`} className={styles.gantt_task_row}>
+					<div key={`${i}-${tsk?.Id}-${tsk.name}`} className={styles.gantt_task_row}>
 						<input
 							ref={el => (inputRef.current[i] = el)}
 							onChange={e => onChange(e, i)}
-							data-task-id={tsk?.id}
+							data-task-id={tsk?.Id}
 							value={tsk?.name}
 							className={styles.input}
 						/>
-						<button onClick={handleDelete} type='button' data-task-id={tsk?.id} className={styles.button}>
+						<button onClick={handleDelete} type='button' data-task-id={tsk?.Id} className={styles.button}>
 							X
 						</button>
 					</div>
