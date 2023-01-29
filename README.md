@@ -8,9 +8,11 @@ It also uses Xarrow react library for arrows. Not fully utilized at the moment a
 
 Work to do:
 
-- At the moment this project is using mockup data. No backend connected. That must be solved at the later stage. I consider using tanstack query library. I will see how it goes. (https://tanstack.com/query/latest)
-- No data calculation done - to be added.
+- The project moved to nocodb as backend. Still considering using tanstack query library. I will see how it goes. (https://tanstack.com/query/latest)
+- Proper structure of data in backend need to be defined.
 - Some logic of adding/removing tasks must be added.
+- Now we can move tasks in gantt view. Changes are not persistant.
+- Moving to nocodb creates some chalanges as I am working on some real data on my side. settings.js file was added to address that issue but that brakes the program at the moment if you try to build the project. Fix needed.
 
 If you want to try it steps are:
 

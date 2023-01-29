@@ -13,7 +13,7 @@ function App() {
 				<nav>
 					<h1>Project tracker</h1>
 					<NavLink to='/'>Front Page</NavLink>
-					<NavLink to='/gantt'>Gantt Chart</NavLink>
+					{token && <NavLink to='/gantt'>Gantt Chart</NavLink>}
 				</nav>
 				<Routes>
 					<Route path='/' element={<FrontPage token={token} setToken={setToken} />} />
