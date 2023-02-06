@@ -21,35 +21,35 @@ export default function FrontPage({ token, setToken }) {
 			.catch(data => console.log('error:', data))
 	}
 
-	const {
-		data: tasksData,
-		isLoading,
-		error,
-	} = useQuery({
-		queryKey: ['tasksData'],
-		queryFn: () => getTaskData(token),
-		enabled: token !== '' && token !== undefined,
-	})
+	// const {
+	// 	data: tasksData,
+	// 	isLoading,
+	// 	error,
+	// } = useQuery({
+	// 	queryKey: ['tasksData'],
+	// 	queryFn: () => getTaskData(token),
+	// 	enabled: token !== '' && token !== undefined,
+	// })
 
-	const {
-		data: arrowData,
-		isLoading: isPendingArrowData,
-		error: errorArrowData,
-	} = useQuery({
-		queryKey: ['arrowData'],
-		queryFn: () => getArrowData(token),
-		enabled: token !== '' && token !== undefined,
-	})
+	// const {
+	// 	data: arrowData,
+	// 	isLoading: isPendingArrowData,
+	// 	error: errorArrowData,
+	// } = useQuery({
+	// 	queryKey: ['arrowData'],
+	// 	queryFn: () => getArrowData(token),
+	// 	enabled: token !== '' && token !== undefined,
+	// })
 
-	const {
-		data: taskDurationsData,
-		isLoading: isPendingTaskDuration,
-		error: errorTaskDuration,
-	} = useQuery({
-		queryKey: ['taskDurationsData'],
-		queryFn: () => getTaskDurationData(token),
-		enabled: token !== '' && token !== undefined,
-	})
+	// const {
+	// 	data: taskDurationsData,
+	// 	isLoading: isPendingTaskDuration,
+	// 	error: errorTaskDuration,
+	// } = useQuery({
+	// 	queryKey: ['taskDurationsData'],
+	// 	queryFn: () => getTaskDurationData(token),
+	// 	enabled: token !== '' && token !== undefined,
+	// })
 
 	return (
 		<div>

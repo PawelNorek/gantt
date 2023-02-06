@@ -56,7 +56,8 @@ export default function TimeRange({ timeRange, setTimeRange }) {
 						name='from-select-month'
 						value={timeRange.fromSelectMonth}
 						onChange={onChange}
-						className={styles.select}>
+						className={styles.select}
+						onMouseDown={e => e.stopPropagation(e)}>
 						{monthsOptions}
 					</select>
 					<select
@@ -65,7 +66,8 @@ export default function TimeRange({ timeRange, setTimeRange }) {
 						value={timeRange.fromSelectYear}
 						onChange={onChange}
 						style={{ marginLeft: '5px' }}
-						className={styles.select}>
+						className={styles.select}
+						onMouseDown={e => e.stopPropagation(e)}>
 						{yearsOptions}
 					</select>
 				</fieldset>
@@ -77,7 +79,8 @@ export default function TimeRange({ timeRange, setTimeRange }) {
 						name='to-select-month'
 						value={timeRange.toSelectMonth}
 						onChange={onChange}
-						className={styles.select}>
+						className={styles.select}
+						onMouseDown={e => e.stopPropagation(e)}>
 						{monthsOptions}
 					</select>
 					<select
@@ -86,7 +89,8 @@ export default function TimeRange({ timeRange, setTimeRange }) {
 						value={timeRange.toSelectYear}
 						onChange={onChange}
 						style={{ marginLeft: '5px' }}
-						className={styles.select}>
+						className={styles.select}
+						onMouseDown={e => e.stopPropagation(e)}>
 						{yearsOptions}
 					</select>
 				</fieldset>

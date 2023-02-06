@@ -47,7 +47,12 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
 					<label htmlFor='select-task' className={styles.fieldset_label}>
 						Which task?
 					</label>
-					<select id='select-task' name='select-task' onChange={onChange} value={task}>
+					<select
+						id='select-task'
+						name='select-task'
+						onChange={onChange}
+						value={task}
+						onMouseDown={e => e.stopPropagation(e)}>
 						<option disabled defaultValue value=''>
 							select a task
 						</option>
@@ -74,6 +79,7 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
 							max='2050-12-31'
 							onChange={onChange}
 							className={styles.input}
+							onMouseDown={e => e.stopPropagation(e)}
 						/>
 					</div>
 					<div style={{ marginLeft: '10px' }} className={styles.fieldset_container}>
@@ -89,6 +95,7 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
 							max='2050-12-31'
 							onChange={onChange}
 							className={styles.input}
+							onMouseDown={e => e.stopPropagation(e)}
 						/>
 					</div>
 				</fieldset>

@@ -8,9 +8,11 @@ import {
 	dayDiff,
 } from '../../helpers/dateFunctions'
 import { months } from '../../constants'
-import Xarrow from 'react-xarrows'
+import { patchTaskDurationData } from '../../api/dataQuery'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { RenderArrows } from './RenderArrows'
 
-export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDurations, arrows }) {
+export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDurations, arrows, token }) {
 	// for dynamic css styling
 	const ganttTimePeriod = {
 		display: 'grid',
@@ -30,6 +32,8 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 		outline: '0.5px solid var(--color-outline)',
 		marginTop: '0.5px',
 	}
+
+	const queryClient = useQueryClient()
 
 	const taskDuration = {
 		position: 'relative',
@@ -64,14 +68,6 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 	let plan_vs_realRow = []
 	let realRow = []
 	let incomeTotalRow = []
-
-	function RenderArrows({ arrows }) {
-		return arrows.map(arrow => {
-			return (
-				<Xarrow key={arrow.Id} start={arrow.start} end={arrow.end} startAnchor='bottom' endAnchor='left' path='grid' />
-			)
-		})
-	}
 
 	for (let i = 0; i < numMonths; i++) {
 		// create month rows
@@ -142,6 +138,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 
 	// create task rows
 	if (tasks && taskDurations && arrows) {
+		const test_arrow = []
 		tasks.forEach(task => {
 			let mnth = new Date(startMonth)
 			for (let i = 0; i < numMonths; i++) {
@@ -198,6 +195,14 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 								onMouseUp={e => handleMouseUp(e)}>
 								{taskDurations.map((el, i) => {
 									if (el?.task === task?.Id && el?.start === formattedDate && el?.task !== manipulationModeOn) {
+										// console.log(el, i)
+										if (el?.parent !== null) {
+											test_arrow.push({
+												Id: i,
+												start: `${el?.parent}`,
+												end: `${el?.task}`,
+											})
+										}
 										return (
 											<div
 												key={`${i}-${el?.Id}`}
@@ -237,7 +242,8 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 									}
 									return ''
 								})}
-								{i === 0 && j === 1 && manipulationModeOn === 0 && <RenderArrows arrows={arrows} />}
+								{/* {i === 0 && j === 1 && manipulationModeOn === 0 && <RenderArrows arrows={arrows} />} */}
+								{i === 0 && j === 1 && manipulationModeOn === 0 && <RenderArrows arrows={test_arrow} />}
 							</div>
 						)
 					}
@@ -260,11 +266,18 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 	function deleteTaskDuration(e, Id) {
 		if (e.key === 'Delete' || e.key === 'Backspace') {
 			// update taskDurations
-			const newTaskDurations = taskDurations.filter(taskDuration => taskDuration.Id !== Id)
+			// const newTaskDurations = taskDurations.filter(taskDuration => taskDuration.Id !== Id)
 			// update state (if data on backend - make API request to update data)
-			setTaskDurations(newTaskDurations)
+			// setTaskDurations(newTaskDurations)
 		}
 	}
+
+	const usePatchTaskDurationDataMutation = useMutation({
+		mutationFn: ({ Id, task, start, end, parent, token }) => patchTaskDurationData(Id, task, start, end, parent, token),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['taskDurations'] })
+		},
+	})
 
 	function handleMouseUp(e) {
 		//manipulationModeOn holds information about task where mouse button was pressed down
@@ -286,13 +299,20 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 			taskDuration.start = taskData[0]
 			taskDuration.end = taskData[1]
 
-			const newTaskDurations = taskDurations.filter(taskDuration => taskDuration.task !== manipulationModeOn)
-			newTaskDurations.push(taskDuration)
-
+			// const newTaskDurations = taskDurations.filter(taskDuration => taskDuration.task !== manipulationModeOn)
+			// newTaskDurations.push(taskDuration)
+			const tableRowId = taskDurations.filter(taskDuration => taskDuration.task === manipulationModeOn)[0].Id
 			// update state (if data on backend - make API request to update data)
-			setTaskDurations(newTaskDurations)
+			// setTaskDurations(newTaskDurations)
 
-			// console.log(taskDurations)
+			usePatchTaskDurationDataMutation.mutate({
+				Id: tableRowId,
+				task: manipulationModeOn,
+				start: taskDuration.start,
+				end: taskDuration.end,
+				parent: taskDuration.parent,
+				token: token,
+			})
 
 			setManipulationModeOn(0)
 			setLeftManipulation(false)

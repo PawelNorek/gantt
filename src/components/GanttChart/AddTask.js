@@ -30,7 +30,7 @@ export default function AddTask({ setTasks }) {
 	}
 
 	return (
-		<form id='add-task' onSubmit={handleSubmit} className={styles.add_task}>
+		<form id='add-task' onSubmit={handleSubmit} className={styles.add_task} onMouseDown={e => e.stopPropagation(e)}>
 			<h2>Add Task</h2>
 			<input value={task} onChange={onChange} placeholder='add task name' className={styles.input} />
 			<AddButton />
