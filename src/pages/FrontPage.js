@@ -1,7 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { useState } from 'react'
-import { getArrowData, getTaskData, getTaskDurationData, getToken } from '../api/dataQuery'
+import { getToken } from '../api/dataQuery'
 
 export default function FrontPage({ token, setToken }) {
 	const [emailValue, setEmailValue] = useState('')
@@ -20,36 +19,6 @@ export default function FrontPage({ token, setToken }) {
 			.then(data => setToken(data.token))
 			.catch(data => console.log('error:', data))
 	}
-
-	// const {
-	// 	data: tasksData,
-	// 	isLoading,
-	// 	error,
-	// } = useQuery({
-	// 	queryKey: ['tasksData'],
-	// 	queryFn: () => getTaskData(token),
-	// 	enabled: token !== '' && token !== undefined,
-	// })
-
-	// const {
-	// 	data: arrowData,
-	// 	isLoading: isPendingArrowData,
-	// 	error: errorArrowData,
-	// } = useQuery({
-	// 	queryKey: ['arrowData'],
-	// 	queryFn: () => getArrowData(token),
-	// 	enabled: token !== '' && token !== undefined,
-	// })
-
-	// const {
-	// 	data: taskDurationsData,
-	// 	isLoading: isPendingTaskDuration,
-	// 	error: errorTaskDuration,
-	// } = useQuery({
-	// 	queryKey: ['taskDurationsData'],
-	// 	queryFn: () => getTaskDurationData(token),
-	// 	enabled: token !== '' && token !== undefined,
-	// })
 
 	return (
 		<div>

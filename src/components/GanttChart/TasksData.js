@@ -1,3 +1,5 @@
+//creates second column of chart
+
 import { useEffect, useRef } from 'react'
 import styles from './TasksData.module.css'
 

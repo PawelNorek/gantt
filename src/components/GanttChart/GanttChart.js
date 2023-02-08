@@ -8,15 +8,10 @@ import Tasks from './Tasks'
 import TasksData from './TasksData'
 import TimeRange from './TimeRange'
 import TimeTable from './TimeTable'
-import { getArrowData, getTaskData, getTaskDurationData } from '../../api/dataQuery'
-import { useQuery } from '@tanstack/react-query'
-import { useArrowDataQuery, useTaskDurationDataQuery, useTasksDataQuery } from '../../hooks/queryHooks'
+import { useTaskDurationDataQuery, useTasksDataQuery } from '../../hooks/queryHooks'
 
 export default function GanttChart({ token }) {
 	let date = new Date()
-
-	// const [tasks, setTasks] = useState(null)
-	// const [taskDurations, setTaskDurations] = useState(null)
 
 	const [timeRange, setTimeRange] = useState({
 		fromSelectMonth: date.getMonth(),
@@ -24,14 +19,11 @@ export default function GanttChart({ token }) {
 		toSelectMonth: date.getMonth() + 2,
 		toSelectYear: date.getFullYear(),
 	})
-	// const [arrows, setArrows] = useState([])
 
 	const { data: tasks, isLoading: isPendingTasks, error: errorTasks } = useTasksDataQuery(token)
 
 	let setTasks = ''
 	let setTaskDurations = ''
-
-	const { data: arrows, isLoading: isPendingArrowData, error: errorArrowData } = useArrowDataQuery(token)
 
 	const {
 		data: taskDurations,
@@ -41,24 +33,17 @@ export default function GanttChart({ token }) {
 
 	return (
 		<div id='gantt-container'>
-			{(isPendingArrowData || isPendingTaskDuration || isPendingTasks) && <div>Loading</div>}
-			{(errorTasks || errorArrowData || errorTaskDuration) && <div>{errorTasks}</div>}
-			{tasks && arrows && taskDurations && (
+			{(isPendingTaskDuration || isPendingTasks) && <div>Loading</div>}
+			{(errorTasks || errorTaskDuration) && <div>{errorTasks}</div>}
+			{tasks && taskDurations && (
 				<>
 					<h1 className='title' onMouseDown={e => e.preventDefault(e)}>
 						Gantt Tracker
 					</h1>
 					<Grid>
-						<Tasks tasks={tasks.list} setTasks={setTasks} setTaskDurations={setTaskDurations} />
-						<TasksData tasks={tasks.list} setTasks={setTasks} setTaskDurations={setTaskDurations} />
-						<TimeTable
-							timeRange={timeRange}
-							tasks={tasks.list}
-							taskDurations={taskDurations.list}
-							setTaskDurations={setTaskDurations}
-							arrows={arrows.list}
-							token={token}
-						/>
+						<Tasks tasks={tasks.list} taskDurations={taskDurations.list} token={token} />
+						<TasksData tasks={tasks.list} />
+						<TimeTable timeRange={timeRange} tasks={tasks.list} taskDurations={taskDurations.list} token={token} />
 					</Grid>
 					<Settings>
 						<AddTask setTasks={setTasks} />

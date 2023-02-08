@@ -12,7 +12,8 @@ import { patchTaskDurationData } from '../../api/dataQuery'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { RenderArrows } from './RenderArrows'
 
-export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDurations, arrows, token }) {
+// export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDurations, arrows, token }) {
+export default function TimeTable({ timeRange, tasks, taskDurations, token }) {
 	// for dynamic css styling
 	const ganttTimePeriod = {
 		display: 'grid',
@@ -137,14 +138,14 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 	}
 
 	// create task rows
-	if (tasks && taskDurations && arrows) {
-		const test_arrow = []
+	// if (tasks && taskDurations && arrows) {
+	if (tasks && taskDurations) {
+		const arrows = []
 		tasks.forEach(task => {
 			let mnth = new Date(startMonth)
 			for (let i = 0; i < numMonths; i++) {
 				const curYear = mnth.getFullYear()
 				const curMonth = mnth.getMonth() + 1
-
 				const numDays = getDaysInMonth(curYear, curMonth)
 
 				for (let j = 1; j <= numDays; j++) {
@@ -153,9 +154,10 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 					// add task and date data attributes
 					const formattedDate = createFormattedDateFromStr(curYear, curMonth, j)
 
-					if (manipulationModeOn === task?.Id) {
+					if (manipulationModeOn === task?.task) {
 						if (taskData[0] <= formattedDate && taskData[1] >= formattedDate) {
 							taskRow.push(
+								//make cell grey during manipulation
 								<div
 									key={`${task.Id}-${j}`}
 									style={{
@@ -169,6 +171,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 							)
 						} else {
 							taskRow.push(
+								//grey cell for 'S' days
 								<div
 									key={`${task.Id}-${j}`}
 									style={{
@@ -194,13 +197,14 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 								onMouseEnter={handleDivMouseEnter}
 								onMouseUp={e => handleMouseUp(e)}>
 								{taskDurations.map((el, i) => {
-									if (el?.task === task?.Id && el?.start === formattedDate && el?.task !== manipulationModeOn) {
+									if (el?.task === task?.task && el?.start === formattedDate && el?.task !== manipulationModeOn) {
 										// console.log(el, i)
 										if (el?.parent !== null) {
-											test_arrow.push({
+											//fills in arrow data
+											arrows.push({
 												Id: i,
-												start: `${el?.parent}`,
-												end: `${el?.task}`,
+												start: `${taskDurations.filter(row => row.task === el?.parent)[0].Id}`,
+												end: `${el?.Id}`,
 											})
 										}
 										return (
@@ -214,27 +218,27 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 												}}
 												onKeyDown={e => deleteTaskDuration(e, el?.Id)}
 												onMouseEnter={e => {
-													setTaskDurationUnderMouseid(el?.Id)
+													setTaskDurationUnderMouseid(el?.task)
 												}}
 												onMouseLeave={e => {
 													setTaskDurationUnderMouseid(null)
 												}}>
-												{taskDurationUnderMouseid === el?.Id && (
+												{taskDurationUnderMouseid === el?.task && (
 													<div
 														className={styles.left_box}
 														onMouseDown={e => {
 															setTaskData([el?.start, el?.end])
 															setLeftManipulation(true)
-															setManipulationModeOn(task?.Id)
+															setManipulationModeOn(task?.task)
 														}}></div>
 												)}
-												{taskDurationUnderMouseid === el?.Id && (
+												{taskDurationUnderMouseid === el?.task && (
 													<div
 														className={styles.right_box}
 														onMouseDown={e => {
 															setRightManipulation(true)
 															setTaskData([el?.start, el?.end])
-															setManipulationModeOn(task?.Id)
+															setManipulationModeOn(task?.task)
 														}}></div>
 												)}
 											</div>
@@ -242,8 +246,8 @@ export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDura
 									}
 									return ''
 								})}
+								{i === 0 && j === 1 && manipulationModeOn === 0 && <RenderArrows arrows={arrows} />}
 								{/* {i === 0 && j === 1 && manipulationModeOn === 0 && <RenderArrows arrows={arrows} />} */}
-								{i === 0 && j === 1 && manipulationModeOn === 0 && <RenderArrows arrows={test_arrow} />}
 							</div>
 						)
 					}
