@@ -41,9 +41,9 @@ export default function GanttChart({ token }) {
 						Gantt Tracker
 					</h1>
 					<Grid>
-						<Tasks tasks={tasks.list} taskDurations={taskDurations.list} token={token} />
-						<TasksData tasks={tasks.list} />
-						<TimeTable timeRange={timeRange} tasks={tasks.list} taskDurations={taskDurations.list} token={token} />
+						<Tasks tasks={tasks.list.sort((a, b) => a.order > b.order  ? 1 : -1)} taskDurations={taskDurations.list} token={token}/>
+						<TasksData tasks={tasks.list.sort((a, b) => a.order > b.order  ? 1 : -1)} />
+						<TimeTable timeRange={timeRange} tasks={tasks.list.sort((a, b) => a.order > b.order  ? 1 : -1)} taskDurations={taskDurations.list} token={token} />
 					</Grid>
 					<Settings>
 						<AddTask setTasks={setTasks} />

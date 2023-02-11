@@ -1,16 +1,27 @@
 //creates first column of chart
 
-import { deleteTaskDurationData, deleteTasksData, patchTasksData } from '../../api/dataQuery'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-
 import { useEffect, useRef } from 'react'
 import styles from './Tasks.module.css'
+import {
+	// useDeleteTaskDurationDataMutation,
+	// useDeleteTasksDataMutation,
+	// useUpdateTasksDataMutation,
+} from '../../hooks/queryHooks'
+import { addTasksData, deleteTaskDurationData, deleteTasksData, patchTasksData } from '../../api/dataQuery'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Tasks({ tasks, taskDurations, token }) {
+
 	const inputRef = useRef([])
 	const indexRef = useRef(null)
 
 	const queryClient = useQueryClient()
+
+	// const updateTasksData = useUpdateTasksDataMutation()
 
 	const useUpdateTasksDataMutation = useMutation({
 		mutationFn: ({ Id, task, name, value, token }) => patchTasksData(Id, task, name, value, token),
@@ -19,10 +30,21 @@ export default function Tasks({ tasks, taskDurations, token }) {
 		},
 	})
 
+	const useAddTasksDataMutation = useMutation({
+		mutationFn: ({ task, name, value, token }) => addTasksData(task, name, value, token),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['tasks'] })
+		},
+	})
+
+	// const deleteTasksData = useDeleteTasksDataMutation()
+
 	const useDeleteTasksDataMutation = useMutation({
 		mutationFn: ({ Id, token }) => deleteTasksData(Id, token),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
 	})
+
+	// const deleteTaskDurationData = useDeleteTaskDurationDataMutation()
 
 	const useDeleteTaskDurationDataMutation = useMutation({
 		mutationFn: ({ Id, token }) => deleteTaskDurationData(Id, token),
@@ -43,10 +65,11 @@ export default function Tasks({ tasks, taskDurations, token }) {
 		//from that we will need to find id of row which needs to be deleted
 		const taskDurationToBeDel = taskDurations.filter(row => row.task === taskToBeDel_task)
 
-		console.log(idNum, taskToBeDel_task, taskDurationToBeDel)
+		// console.log(taskToBeDel_task, taskDurationToBeDel, taskDurationToBeDel[0].Id)
 
 		if (taskDurationToBeDel.length !== 0) {
 			useDeleteTaskDurationDataMutation.mutate({
+			// deleteTaskDurationData.mutate({
 				Id: taskDurationToBeDel[0].Id,
 				token: token,
 			})
@@ -55,6 +78,19 @@ export default function Tasks({ tasks, taskDurations, token }) {
 			Id: idNum,
 			token: token,
 		})
+	}
+
+	function handleAddTask (e) {
+		// const idNum = parseInt(e.target.getAttribute('data-task-id'))
+
+		useAddTasksDataMutation.mutate({
+			task: 22,
+			name: 'test',
+			value: 123,
+			token: token,
+		})
+
+		toast.info('Task added');
 	}
 
 	function onChange(e, i) {
@@ -77,6 +113,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 
 	return (
 		<div id='gantt-grid-container__tasks' className={styles.gantt_grid_container_tasks}>
+			<ToastContainer/>
 			<div className={styles.gantt_task_row}></div>
 			<div className={styles.gantt_task_row}></div>
 			<div className={styles.gantt_task_row}></div>
@@ -87,17 +124,26 @@ export default function Tasks({ tasks, taskDurations, token }) {
 			{tasks &&
 				tasks.map((tsk, i) => (
 					<div key={`${i}-${tsk?.Id}-${tsk.name}`} className={styles.gantt_task_row}>
-						<input
-							ref={el => (inputRef.current[i] = el)}
-							onChange={e => onChange(e, i)}
-							data-task-id={tsk?.Id}
-							value={tsk?.name}
-							className={styles.input}
-							onMouseDown={e => e.stopPropagation(e)}
-						/>
-						<button onClick={handleDelete} type='button' data-task-id={tsk?.Id} className={styles.button}>
-							X
-						</button>
+						{/* {tsk?.type !== 'place_holder' && ( */}
+							<input
+								ref={el => (inputRef.current[i] = el)}
+								onChange={e => onChange(e, i)}
+								data-task-id={tsk?.Id}
+								value={tsk?.name}
+								className={styles.input}
+								onMouseDown={e => e.stopPropagation(e)}
+							/>
+						{/* )} */}
+						{tsk?.type !== 'place_holder' && (
+							<button onClick={handleDelete} type='button' data-task-id={tsk?.Id} className={styles.button} onMouseUp={(e)=>e.stopPropagation(e)}>
+							✖️
+							</button>
+						)}
+						{tsk?.type === 'place_holder' && (
+							<button onClick={handleAddTask} type='button' data-task-id={tsk?.Id} className={styles.button} onMouseUp={(e)=>e.stopPropagation(e)}>
+							➕
+							</button>
+						)}
 					</div>
 				))}
 		</div>

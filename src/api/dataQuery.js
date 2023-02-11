@@ -93,6 +93,24 @@ export const patchTasksData = async (id, task, name, value, token) => {
 	return await axios(config)
 }
 
+export const addTasksData = async (task, name, value, token) => {
+	const config = {
+		method: 'POST',
+		url: `https://${settings.host}/api/v1/db/data/noco/p_ms46kiyconfhxk/tasks/`,
+		headers: {
+			'Content-Type': 'application/json',
+			'xc-auth': token,
+		},
+		data: JSON.stringify({
+			task: task,
+			name: name,
+			value: value,
+		}),
+	}
+
+	return await axios(config)
+}
+
 export const deleteTasksData = async (id, token) => {
 	const config = {
 		method: 'DELETE',
