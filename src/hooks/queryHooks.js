@@ -9,6 +9,8 @@ import {
 	patchTasksData,
 } from '../api/dataQuery'
 
+//TODO: add select in useQuery to select data and sort before returning it to application
+
 export const useTasksDataQuery = token =>
 	useQuery({
 		queryKey: ['tasks'],

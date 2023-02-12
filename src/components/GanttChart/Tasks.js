@@ -2,20 +2,20 @@
 
 import { useEffect, useRef } from 'react'
 import styles from './Tasks.module.css'
-import {
-	// useDeleteTaskDurationDataMutation,
-	// useDeleteTasksDataMutation,
-	// useUpdateTasksDataMutation,
-} from '../../hooks/queryHooks'
+import // useDeleteTaskDurationDataMutation,
+// useDeleteTasksDataMutation,
+// useUpdateTasksDataMutation,
+'../../hooks/queryHooks'
 import { addTasksData, deleteTaskDurationData, deleteTasksData, patchTasksData } from '../../api/dataQuery'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
+import { DragDropContext, Draggable } from 'react-beautiful-dnd'
+import { StrictModeDroppable as Droppable } from '../../helpers/StrictModeDroppable'
 
 export default function Tasks({ tasks, taskDurations, token }) {
-
 	const inputRef = useRef([])
 	const indexRef = useRef(null)
 
@@ -69,7 +69,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 
 		if (taskDurationToBeDel.length !== 0) {
 			useDeleteTaskDurationDataMutation.mutate({
-			// deleteTaskDurationData.mutate({
+				// deleteTaskDurationData.mutate({
 				Id: taskDurationToBeDel[0].Id,
 				token: token,
 			})
@@ -80,7 +80,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 		})
 	}
 
-	function handleAddTask (e) {
+	function handleAddTask(e) {
 		// const idNum = parseInt(e.target.getAttribute('data-task-id'))
 
 		useAddTasksDataMutation.mutate({
@@ -90,7 +90,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 			token: token,
 		})
 
-		toast.info('Task added');
+		toast.info('Task added')
 	}
 
 	function onChange(e, i) {
@@ -113,7 +113,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 
 	return (
 		<div id='gantt-grid-container__tasks' className={styles.gantt_grid_container_tasks}>
-			<ToastContainer/>
+			<ToastContainer />
 			<div className={styles.gantt_task_row}></div>
 			<div className={styles.gantt_task_row}></div>
 			<div className={styles.gantt_task_row}></div>
@@ -121,31 +121,64 @@ export default function Tasks({ tasks, taskDurations, token }) {
 			<div className={styles.gantt_task_row}>Income Plan vs Real</div>
 			<div className={styles.gantt_task_row}>Real</div>
 			<div className={styles.gantt_task_row}>Income total</div>
-			{tasks &&
-				tasks.map((tsk, i) => (
-					<div key={`${i}-${tsk?.Id}-${tsk.name}`} className={styles.gantt_task_row}>
-						{/* {tsk?.type !== 'place_holder' && ( */}
-							<input
-								ref={el => (inputRef.current[i] = el)}
-								onChange={e => onChange(e, i)}
-								data-task-id={tsk?.Id}
-								value={tsk?.name}
-								className={styles.input}
-								onMouseDown={e => e.stopPropagation(e)}
-							/>
-						{/* )} */}
-						{tsk?.type !== 'place_holder' && (
-							<button onClick={handleDelete} type='button' data-task-id={tsk?.Id} className={styles.button} onMouseUp={(e)=>e.stopPropagation(e)}>
-							✖️
-							</button>
+			{tasks && (
+				<DragDropContext>
+					<Droppable droppableId='tasks'>
+						{provided => (
+							<section {...provided.droppableProps} ref={provided.innerRef}>
+								{tasks.map((tsk, i) => (
+									<Draggable key={`${i}-${tsk?.Id}-${tsk.name}`} draggableId={`${tsk?.Id}`} index={i}>
+										{provided => (
+											<div
+												{...provided.draggableProps}
+												{...provided.dragHandleProps}
+												ref={provided.innerRef}
+												className={styles.gantt_task_row}>
+												{/* {tsk?.type !== 'place_holder' && ( */}
+												{tsk?.type !== 'place_holder' && (
+													<p onMouseUp={e => e.stopPropagation(e)} style={{ marginTop: 7 }}>
+														↕️↕️
+													</p>
+												)}
+												<input
+													ref={el => (inputRef.current[i] = el)}
+													onChange={e => onChange(e, i)}
+													data-task-id={tsk?.Id}
+													value={tsk?.name}
+													className={styles.input}
+													onMouseDown={e => e.stopPropagation(e)}
+												/>
+												{/* )} */}
+												{tsk?.type !== 'place_holder' && (
+													<button
+														onClick={handleDelete}
+														type='button'
+														data-task-id={tsk?.Id}
+														className={styles.button}
+														onMouseUp={e => e.stopPropagation(e)}>
+														✖️
+													</button>
+												)}
+												{tsk?.type === 'place_holder' && (
+													<button
+														onClick={handleAddTask}
+														type='button'
+														data-task-id={tsk?.Id}
+														className={styles.button}
+														onMouseUp={e => e.stopPropagation(e)}>
+														➕
+													</button>
+												)}
+											</div>
+										)}
+									</Draggable>
+								))}
+								{provided.placeholder}
+							</section>
 						)}
-						{tsk?.type === 'place_holder' && (
-							<button onClick={handleAddTask} type='button' data-task-id={tsk?.Id} className={styles.button} onMouseUp={(e)=>e.stopPropagation(e)}>
-							➕
-							</button>
-						)}
-					</div>
-				))}
+					</Droppable>
+				</DragDropContext>
+			)}
 		</div>
 	)
 }
