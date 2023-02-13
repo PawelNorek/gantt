@@ -75,7 +75,7 @@ export const deleteTaskDurationData = async (id, token) => {
 	return await axios(config)
 }
 
-export const patchTasksData = async (id, task, name, value, token) => {
+export const patchTasksData = async (id, task, name, value, order, token) => {
 	const config = {
 		method: 'PATCH',
 		url: `https://${settings.host}/api/v1/db/data/noco/p_ms46kiyconfhxk/tasks/${id}`,
@@ -87,13 +87,14 @@ export const patchTasksData = async (id, task, name, value, token) => {
 			task: task,
 			name: name,
 			value: value,
+			order: order,
 		}),
 	}
 
 	return await axios(config)
 }
 
-export const addTasksData = async (task, name, value, token) => {
+export const addTasksData = async (task, name, value, order, token) => {
 	const config = {
 		method: 'POST',
 		url: `https://${settings.host}/api/v1/db/data/noco/p_ms46kiyconfhxk/tasks/`,
@@ -105,6 +106,7 @@ export const addTasksData = async (task, name, value, token) => {
 			task: task,
 			name: name,
 			value: value,
+			order: order,
 		}),
 	}
 

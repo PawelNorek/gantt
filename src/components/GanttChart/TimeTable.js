@@ -136,10 +136,25 @@ export default function TimeTable({ timeRange, tasks, taskDurations, token }) {
 		month.setMonth(month.getMonth() + 1)
 	}
 
+	const pushRowDuringManipulation = (taskId, j, formattedDate, bkColor) => {
+		return (
+			<div
+				key={`${taskId}-${j}`}
+				style={{
+					...ganttTimePeriodCell,
+					backgroundColor: bkColor,
+				}}
+				data-task={taskId}
+				data-date={formattedDate}
+				onMouseEnter={handleDivMouseEnter}
+				onMouseUp={e => handleMouseUp(e)}></div>
+		)
+	}
+
 	// create task rows
 	if (tasks && taskDurations) {
 		const arrows = []
-		tasks.sort((a, b)=>a.order - b.order)
+		tasks.sort((a, b) => a.order - b.order)
 		tasks.map(task => {
 			let mnth = new Date(startMonth)
 			for (let i = 0; i < numMonths; i++) {
@@ -157,30 +172,17 @@ export default function TimeTable({ timeRange, tasks, taskDurations, token }) {
 						if (taskData[0] <= formattedDate && taskData[1] >= formattedDate) {
 							taskRow.push(
 								//make cell grey during manipulation
-								<div
-									key={`${task.Id}-${j}`}
-									style={{
-										...ganttTimePeriodCell,
-										backgroundColor: 'rgb(200, 200, 200)',
-									}}
-									data-task={task?.Id}
-									data-date={formattedDate}
-									onMouseEnter={handleDivMouseEnter}
-									onMouseUp={e => handleMouseUp(e)}></div>
+								pushRowDuringManipulation(task.Id, j, formattedDate, 'rgb(200, 200, 200')
 							)
 						} else {
 							taskRow.push(
 								//grey cell for 'S' days
-								<div
-									key={`${task.Id}-${j}`}
-									style={{
-										...ganttTimePeriodCell,
-										backgroundColor: dayOfTheWeek === 'S' ? 'var(--color-tertiary)' : '#fff',
-									}}
-									data-task={task?.Id}
-									data-date={formattedDate}
-									onMouseEnter={handleDivMouseEnter}
-									onMouseUp={e => handleMouseUp(e)}></div>
+								pushRowDuringManipulation(
+									task.Id,
+									j,
+									formattedDate,
+									dayOfTheWeek === 'S' ? 'var(--color-tertiary)' : '#fff'
+								)
 							)
 						}
 					} else {
