@@ -1,10 +1,7 @@
 //creates first column of chart
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './Tasks.module.css'
-// import useDeleteTaskDurationDataMutation,
-// useDeleteTasksDataMutation,
-// useUpdateTasksDataMutation,
 // '../../hooks/queryHooks'
 import { addTasksData, deleteTaskDurationData, deleteTasksData, patchTasksData } from '../../api/dataQuery'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -20,6 +17,8 @@ export default function Tasks({ tasks, taskDurations, token }) {
 	const indexRef = useRef(null)
 
 	const queryClient = useQueryClient()
+
+	const [taskAddValue, setTaskAddValue] = useState('')
 
 	// const updateTasksData = useUpdateTasksDataMutation()
 
@@ -81,7 +80,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 		toast.info('Task deleted')
 	}
 
-	function handleAddTask(e) {
+	function handleAddTask(value) {
 		// const idNum = parseInt(e.target.getAttribute('data-task-id'))
 
 		const highestTaskOrderNumber = Math.max(
@@ -91,13 +90,15 @@ export default function Tasks({ tasks, taskDurations, token }) {
 		useAddTasksDataMutation.mutate(
 			{
 				task: 22,
-				name: 'test',
+				name: taskAddValue,
 				value: 123,
 				order: highestTaskOrderNumber + 1,
 				token: token,
 			},
 			{
-				onSuccess: () => {},
+				onSuccess: () => {
+					setTaskAddValue('')
+				},
 			}
 		)
 		toast.info('Task added')
@@ -137,16 +138,25 @@ export default function Tasks({ tasks, taskDurations, token }) {
 		console.log('Tasks temporary:', tasksTemporary)
 	}
 
-	function onChange(e, i) {
-		const { value } = e.target
-		const idNum = parseInt(e.target.getAttribute('data-task-id'))
+	function handelOnKeyDown(event, cellType) {
+		const { value } = event.target
+		const idNum = parseInt(event.target.getAttribute('data-task-id'))
 
-		indexRef.current = i
-		// useUpdateTasksDataMutation.mutate({
-		// 	Id: idNum,
-		// 	name: value,
-		// 	token: token,
-		// })
+		if (cellType === 'place_holder') {
+			setTaskAddValue(value)
+		}
+
+		if (event.key === 'Enter') {
+			if (cellType === 'data') {
+				useUpdateTasksDataMutation.mutate({
+					Id: idNum,
+					name: value,
+					token: token,
+				})
+			} else {
+				handleAddTask()
+			}
+		}
 	}
 
 	function notPlace_holderEntry(task, i) {
@@ -157,9 +167,9 @@ export default function Tasks({ tasks, taskDurations, token }) {
 				</p>
 				<input
 					ref={el => (inputRef.current[i] = el)}
-					onChange={e => onChange(e, i)}
+					onKeyDown={e => handelOnKeyDown(e, 'data')}
 					data-task-id={task?.Id}
-					value={task?.name}
+					defaultValue={task?.name}
 					className={styles.input}
 					onMouseDown={e => e.stopPropagation(e)}
 				/>
@@ -180,20 +190,23 @@ export default function Tasks({ tasks, taskDurations, token }) {
 			<>
 				<input
 					ref={el => (inputRef.current[i] = el)}
-					onChange={e => onChange(e, i)}
+					onKeyDown={e => handelOnKeyDown(e, 'place_holder')}
+					onChange={e => handelOnKeyDown(e, 'place_holder')}
 					data-task-id={task?.Id}
-					value={task?.name}
+					value={taskAddValue}
 					className={styles.input}
 					onMouseDown={e => e.stopPropagation(e)}
 				/>
-				<button
-					onClick={handleAddTask}
-					type='button'
-					data-task-id={task?.Id}
-					className={styles.button}
-					onMouseUp={e => e.stopPropagation(e)}>
-					➕
-				</button>
+				{taskAddValue && (
+					<button
+						onClick={handleAddTask}
+						type='button'
+						data-task-id={task?.Id}
+						className={styles.button}
+						onMouseUp={e => e.stopPropagation(e)}>
+						➕
+					</button>
+				)}
 			</>
 		)
 	}
@@ -227,7 +240,6 @@ export default function Tasks({ tasks, taskDurations, token }) {
 												{...provided.dragHandleProps}
 												ref={provided.innerRef}
 												className={styles.gantt_task_row}>
-												{/* {tsk?.type !== 'place_holder' && ( */}
 												{tsk?.type !== 'place_holder' && notPlace_holderEntry(tsk, i)}
 												{tsk?.type === 'place_holder' && place_holderEntry(tsk, i)}
 											</div>

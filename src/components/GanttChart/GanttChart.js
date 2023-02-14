@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './GanttChart.css'
 import AddTaskDuration from './AddTaskDuration'
-import AddTask from './AddTask'
+// import AddTask from './AddTask'
 import Grid from './Grid'
 import Settings from './Settings'
 import Tasks from './Tasks'
@@ -22,7 +22,6 @@ export default function GanttChart({ token }) {
 
 	const { data: tasks, isLoading: isPendingTasks, error: errorTasks } = useTasksDataQuery(token)
 
-	let setTasks = ''
 	let setTaskDurations = ''
 
 	const {
@@ -41,12 +40,21 @@ export default function GanttChart({ token }) {
 						Gantt Tracker
 					</h1>
 					<Grid>
-						<Tasks tasks={tasks.list.sort((a, b) => a.order > b.order  ? 1 : -1)} taskDurations={taskDurations.list} token={token}/>
-						<TasksData tasks={tasks.list.sort((a, b) => a.order > b.order  ? 1 : -1)} />
-						<TimeTable timeRange={timeRange} tasks={tasks.list.sort((a, b) => a.order > b.order  ? 1 : -1)} taskDurations={taskDurations.list} token={token} />
+						<Tasks
+							tasks={tasks.list.sort((a, b) => (a.order > b.order ? 1 : -1))}
+							taskDurations={taskDurations.list}
+							token={token}
+						/>
+						<TasksData tasks={tasks.list.sort((a, b) => (a.order > b.order ? 1 : -1))} />
+						<TimeTable
+							timeRange={timeRange}
+							tasks={tasks.list.sort((a, b) => (a.order > b.order ? 1 : -1))}
+							taskDurations={taskDurations.list}
+							token={token}
+						/>
 					</Grid>
 					<Settings>
-						<AddTask setTasks={setTasks} />
+						{/* <AddTask setTasks={setTasks} /> */}
 						<AddTaskDuration tasks={tasks.list} setTaskDurations={setTaskDurations} />
 						<TimeRange timeRange={timeRange} setTimeRange={setTimeRange} />
 					</Settings>
