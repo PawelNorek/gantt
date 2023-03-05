@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
+	addTaskDurationData,
+	addTasksData,
 	deleteTaskDurationData,
 	deleteTasksData,
 	getArrowData,
@@ -34,43 +36,65 @@ export const useTaskDurationDataQuery = token =>
 
 //link to guide: https://upmostly.com/tutorials/post-data-with-usemutation-and-react-query-in-your-reactjs-application
 
-export const useUpdateTaskDurationDataMutation = () => {
+export const useAddTaskDurationDataMutation = () => {
 	const queryClient = useQueryClient()
-	queryClient.setMutationDefaults(['taskDurations'], {
-		mutationFn: ({ Id, task, start, end, parent, token }) => patchTaskDurationData(Id, task, start, end, parent, token),
+
+	return useMutation(({ task, start, end, parent, token }) => addTaskDurationData(task, start, end, parent, token), {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['taskDurations'] })
 		},
 	})
-	return useMutation(['taskDurations'])
+}
+
+export const useUpdateTaskDurationDataMutation = () => {
+	const queryClient = useQueryClient()
+
+	return useMutation(
+		({ Id, task, start, end, parent, token }) => patchTaskDurationData(Id, task, start, end, parent, token),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries({ queryKey: ['taskDurations'] })
+			},
+		}
+	)
 }
 
 export const useDeleteTaskDurationDataMutation = () => {
 	const queryClient = useQueryClient()
-	queryClient.setMutationDefaults(['taskDurations'], {
-		mutationFn: ({ Id, token }) => deleteTaskDurationData(Id, token),
-		onSuccess: () => {queryClient.invalidateQueries({ queryKey: ['taskDurations'] })},
+
+	return useMutation(({ Id, token }) => deleteTaskDurationData(Id, token), {
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['taskDurations'] })
+		},
 	})
-	return useMutation(['taskDurations'])
 }
 
-export const useUpdateTasksDataMutation = () => {
+export const useAddTasksDataMutation = () => {
 	const queryClient = useQueryClient()
-	queryClient.setMutationDefaults(['tasks'], {
-		mutationFn: ({ Id, task, name, value, token }) => patchTasksData(Id, task, name, value, token),
+
+	return useMutation(({ task, name, value, order, token }) => addTasksData(task, name, value, order, token), {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 		},
 	})
-	return useMutation(['tasks'])
+}
+
+export const useUpdateTasksDataMutation = () => {
+	const queryClient = useQueryClient()
+
+	return useMutation(({ Id, task, name, value, order, token }) => patchTasksData(Id, task, name, value, order, token), {
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['tasks'] })
+		},
+	})
 }
 
 export const useDeleteTasksDataMutation = () => {
 	const queryClient = useQueryClient()
-	queryClient.setMutationDefaults(['tasks'], {
-		mutationFn: ({ Id, token }) => deleteTasksData(Id, token),
-		onSuccess: () => {queryClient.invalidateQueries({ queryKey: ['tasks'] })},
-	})
-	return useMutation(['tasks'])
-}
 
+	return useMutation(({ Id, token }) => deleteTasksData(Id, token), {
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['tasks'] })
+		},
+	})
+}

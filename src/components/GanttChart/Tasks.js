@@ -2,53 +2,65 @@
 
 import { useEffect, useRef, useState } from 'react'
 import styles from './Tasks.module.css'
-// '../../hooks/queryHooks'
-import { addTasksData, deleteTaskDurationData, deleteTasksData, patchTasksData } from '../../api/dataQuery'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import { StrictModeDroppable as Droppable } from '../../helpers/StrictModeDroppable'
+import {
+	useAddTasksDataMutation,
+	useDeleteTaskDurationDataMutation,
+	useDeleteTasksDataMutation,
+	useUpdateTasksDataMutation,
+} from '../../hooks/queryHooks'
 
 export default function Tasks({ tasks, taskDurations, token }) {
 	const inputRef = useRef([])
 	const indexRef = useRef(null)
 
-	const queryClient = useQueryClient()
-
 	const [taskAddValue, setTaskAddValue] = useState('')
 
-	// const updateTasksData = useUpdateTasksDataMutation()
+	const updateTasksData = useUpdateTasksDataMutation()
 
-	const useUpdateTasksDataMutation = useMutation({
-		mutationFn: ({ Id, task, name, value, order, token }) => patchTasksData(Id, task, name, value, order, token),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['tasks'] })
-		},
-	})
+	// const useUpdateTasksDataMutation = useMutation({
+	// 	mutationFn: ({ Id, task, name, value, order, token }) => patchTasksData(Id, task, name, value, order, token),
+	// 	onSuccess: () => {
+	// 		queryClient.invalidateQueries({ queryKey: ['tasks'] })
+	// 	},
+	// })
 
-	const useAddTasksDataMutation = useMutation({
-		mutationFn: ({ task, name, value, order, token }) => addTasksData(task, name, value, order, token),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['tasks'] })
-		},
-	})
+	const addTasksData = useAddTasksDataMutation()
 
-	// const deleteTasksData = useDeleteTasksDataMutation()
+	// const useAddTasksDataMutation = useMutation({
+	// 	mutationFn: ({ task, name, value, order, token }) => addTasksData(task, name, value, order, token),
+	// 	onSuccess: () => {
+	// 		queryClient.invalidateQueries({ queryKey: ['tasks'] })
+	// 	},
+	// })
 
-	const useDeleteTasksDataMutation = useMutation({
-		mutationFn: ({ Id, token }) => deleteTasksData(Id, token),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
-	})
+	// const useAddTest_dataMutation = useMutation({
+	// 	mutationFn: ({ task, name, value, order, token }) => addTest_data(task, name, value, order, token),
+	// 	onSuccess: () => {
+	// 		queryClient.invalidateQueries({ queryKey: ['test_data'] })
+	// 	},
+	// })
+
+	const deleteTasksData = useDeleteTasksDataMutation()
+
+	// const useDeleteTasksDataMutation = useMutation({
+	// 	mutationFn: ({ Id, token }) => deleteTasksData(Id, token),
+	// 	onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
+	// })
 
 	// const deleteTaskDurationData = useDeleteTaskDurationDataMutation()
 
-	const useDeleteTaskDurationDataMutation = useMutation({
-		mutationFn: ({ Id, token }) => deleteTaskDurationData(Id, token),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['taskDurations'] }),
-	})
+	const deleteTaskDurationData = useDeleteTaskDurationDataMutation()
+
+	// const useDeleteTaskDurationDataMutation = useMutation({
+	// 	mutationFn: ({ Id, token }) => deleteTaskDurationData(Id, token),
+	// 	onSuccess: () => queryClient.invalidateQueries({ queryKey: ['taskDurations'] }),
+	// })
 
 	function handleDelete(e) {
 		const idNum = parseInt(e.target.getAttribute('data-task-id'))
@@ -67,13 +79,17 @@ export default function Tasks({ tasks, taskDurations, token }) {
 		// console.log(taskToBeDel_task, taskDurationToBeDel, taskDurationToBeDel[0].Id)
 
 		if (taskDurationToBeDel.length !== 0) {
-			useDeleteTaskDurationDataMutation.mutate({
-				// deleteTaskDurationData.mutate({
+			// useDeleteTaskDurationDataMutation.mutate({
+			deleteTaskDurationData.mutate({
 				Id: taskDurationToBeDel[0].Id,
 				token: token,
 			})
 		}
-		useDeleteTasksDataMutation.mutate({
+		// useDeleteTasksDataMutation.mutate({
+		// 	Id: idNum,
+		// 	token: token,
+		// })
+		deleteTasksData.mutate({
 			Id: idNum,
 			token: token,
 		})
@@ -87,7 +103,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 			...tasks.filter(task => task.type !== 'place_holder').map(task => task.order)
 		)
 
-		useAddTasksDataMutation.mutate(
+		addTasksData.mutate(
 			{
 				task: 22,
 				name: taskAddValue,
@@ -101,19 +117,54 @@ export default function Tasks({ tasks, taskDurations, token }) {
 				},
 			}
 		)
+
+		// useAddTasksDataMutation.mutate(
+		// 	{
+		// 		task: 22,
+		// 		name: taskAddValue,
+		// 		value: 123,
+		// 		order: highestTaskOrderNumber + 1,
+		// 		token: token,
+		// 	},
+		// 	{
+		// 		onSuccess: () => {
+		// 			setTaskAddValue('')
+		// 		},
+		// 	}
+		// )
 		toast.info('Task added')
 		const idOfPlaceHolder = tasks.filter(task => task.type === 'place_holder')[0].Id
 
-		useUpdateTasksDataMutation.mutate(
-			{
-				Id: idOfPlaceHolder,
-				order: highestTaskOrderNumber + 2,
-				token: token,
-			},
-			{
-				onSuccess: () => {},
-			}
-		)
+		// useUpdateTasksDataMutation.mutate(
+		// 	{
+		// 		Id: idOfPlaceHolder,
+		// 		order: highestTaskOrderNumber + 2,
+		// 		token: token,
+		// 	},
+		// 	{
+		// 		onSuccess: () => {},
+		// 	}
+		// )
+		updateTasksData.mutate({
+			Id: idOfPlaceHolder,
+			order: highestTaskOrderNumber + 2,
+			token: token,
+		})
+
+		// useAddTest_dataMutation.mutate(
+		// 	{
+		// 		task: 22,
+		// 		name: taskAddValue,
+		// 		value: 123,
+		// 		order: highestTaskOrderNumber + 1,
+		// 		token: token,
+		// 	},
+		// 	{
+		// 		onSuccess: () => {
+		// 			setTaskAddValue('')
+		// 		},
+		// 	}
+		// )
 	}
 
 	function handleOnDragEnd(result) {
@@ -148,7 +199,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 
 		if (event.key === 'Enter') {
 			if (cellType === 'data') {
-				useUpdateTasksDataMutation.mutate({
+				updateTasksData.mutate({
 					Id: idNum,
 					name: value,
 					token: token,

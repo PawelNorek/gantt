@@ -9,8 +9,9 @@ import TasksData from './TasksData'
 import TimeRange from './TimeRange'
 import TimeTable from './TimeTable'
 import { useTaskDurationDataQuery, useTasksDataQuery } from '../../hooks/queryHooks'
+import { useEffect } from 'react'
 
-export default function GanttChart({ token }) {
+export default function GanttChart({ token, setToken }) {
 	let date = new Date()
 
 	const [timeRange, setTimeRange] = useState({
@@ -21,6 +22,16 @@ export default function GanttChart({ token }) {
 	})
 
 	const { data: tasks, isLoading: isPendingTasks, error: errorTasks } = useTasksDataQuery(token)
+
+	useEffect(() => {
+		const cookieValue = document.cookie
+			.split('; ')
+			.find(row => row.startsWith('gantt-cookie='))
+			?.split('=')[1]
+		if (cookieValue) {
+			setToken(cookieValue)
+		}
+	}, [setToken])
 
 	let setTaskDurations = ''
 
@@ -55,7 +66,7 @@ export default function GanttChart({ token }) {
 					</Grid>
 					<Settings>
 						{/* <AddTask setTasks={setTasks} /> */}
-						<AddTaskDuration tasks={tasks.list} setTaskDurations={setTaskDurations} />
+						<AddTaskDuration tasks={tasks.list} setTaskDurations={setTaskDurations} token={token} />
 						<TimeRange timeRange={timeRange} setTimeRange={setTimeRange} />
 					</Settings>
 				</>

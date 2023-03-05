@@ -17,7 +17,7 @@ function App() {
 				</nav>
 				<Routes>
 					<Route path='/' element={<FrontPage token={token} setToken={setToken} />} />
-					<Route path='/gantt' element={<GanttChart token={token} />} />
+					<Route path='/gantt' element={<GanttChart token={token} setToken={setToken} />} />
 					<Route path='*' element={<Navigate to='/' replace />} />
 				</Routes>
 			</BrowserRouter>

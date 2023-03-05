@@ -1,11 +1,14 @@
 import { useState } from 'react'
+import { useAddTaskDurationDataMutation } from '../../hooks/queryHooks'
 import AddButton from './AddButton'
 import styles from './AddTaskDuration.module.css'
 
-export default function AddTaskDuration({ tasks, setTaskDurations }) {
+export default function AddTaskDuration({ tasks, token }) {
 	const [task, setTask] = useState('')
 	const [startDate, setStartDate] = useState('2022-01-01')
 	const [endDate, setEndDate] = useState('2022-01-03')
+
+	const addTaskDuration = useAddTaskDurationDataMutation()
 
 	function onChange(e) {
 		const { value, id } = e.target
@@ -25,17 +28,13 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
 		e.preventDefault()
 
 		if (task === '') return
-		const timeStamp = Date.now()
-		const newTaskDuration = {
-			id: timeStamp,
+
+		addTaskDuration.mutate({
+			task: parseInt(task),
 			start: startDate,
 			end: endDate,
-			task: parseInt(task),
-		}
-
-		setTaskDurations(prevState => {
-			const newState = prevState
-			return [...newState, newTaskDuration]
+			parent: 0,
+			token,
 		})
 	}
 
