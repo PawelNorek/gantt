@@ -23,44 +23,11 @@ export default function Tasks({ tasks, taskDurations, token }) {
 
 	const updateTasksData = useUpdateTasksDataMutation()
 
-	// const useUpdateTasksDataMutation = useMutation({
-	// 	mutationFn: ({ Id, task, name, value, order, token }) => patchTasksData(Id, task, name, value, order, token),
-	// 	onSuccess: () => {
-	// 		queryClient.invalidateQueries({ queryKey: ['tasks'] })
-	// 	},
-	// })
-
 	const addTasksData = useAddTasksDataMutation()
-
-	// const useAddTasksDataMutation = useMutation({
-	// 	mutationFn: ({ task, name, value, order, token }) => addTasksData(task, name, value, order, token),
-	// 	onSuccess: () => {
-	// 		queryClient.invalidateQueries({ queryKey: ['tasks'] })
-	// 	},
-	// })
-
-	// const useAddTest_dataMutation = useMutation({
-	// 	mutationFn: ({ task, name, value, order, token }) => addTest_data(task, name, value, order, token),
-	// 	onSuccess: () => {
-	// 		queryClient.invalidateQueries({ queryKey: ['test_data'] })
-	// 	},
-	// })
 
 	const deleteTasksData = useDeleteTasksDataMutation()
 
-	// const useDeleteTasksDataMutation = useMutation({
-	// 	mutationFn: ({ Id, token }) => deleteTasksData(Id, token),
-	// 	onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
-	// })
-
-	// const deleteTaskDurationData = useDeleteTaskDurationDataMutation()
-
 	const deleteTaskDurationData = useDeleteTaskDurationDataMutation()
-
-	// const useDeleteTaskDurationDataMutation = useMutation({
-	// 	mutationFn: ({ Id, token }) => deleteTaskDurationData(Id, token),
-	// 	onSuccess: () => queryClient.invalidateQueries({ queryKey: ['taskDurations'] }),
-	// })
 
 	function handleDelete(e) {
 		const idNum = parseInt(e.target.getAttribute('data-task-id'))
@@ -76,19 +43,13 @@ export default function Tasks({ tasks, taskDurations, token }) {
 		//from that we will need to find id of row which needs to be deleted
 		const taskDurationToBeDel = taskDurations.filter(row => row.task === taskToBeDel_task)
 
-		// console.log(taskToBeDel_task, taskDurationToBeDel, taskDurationToBeDel[0].Id)
-
 		if (taskDurationToBeDel.length !== 0) {
-			// useDeleteTaskDurationDataMutation.mutate({
 			deleteTaskDurationData.mutate({
 				Id: taskDurationToBeDel[0].Id,
 				token: token,
 			})
 		}
-		// useDeleteTasksDataMutation.mutate({
-		// 	Id: idNum,
-		// 	token: token,
-		// })
+
 		deleteTasksData.mutate({
 			Id: idNum,
 			token: token,
@@ -97,8 +58,6 @@ export default function Tasks({ tasks, taskDurations, token }) {
 	}
 
 	function handleAddTask(value) {
-		// const idNum = parseInt(e.target.getAttribute('data-task-id'))
-
 		const highestTaskOrderNumber = Math.max(
 			...tasks.filter(task => task.type !== 'place_holder').map(task => task.order)
 		)
@@ -118,53 +77,14 @@ export default function Tasks({ tasks, taskDurations, token }) {
 			}
 		)
 
-		// useAddTasksDataMutation.mutate(
-		// 	{
-		// 		task: 22,
-		// 		name: taskAddValue,
-		// 		value: 123,
-		// 		order: highestTaskOrderNumber + 1,
-		// 		token: token,
-		// 	},
-		// 	{
-		// 		onSuccess: () => {
-		// 			setTaskAddValue('')
-		// 		},
-		// 	}
-		// )
 		toast.info('Task added')
 		const idOfPlaceHolder = tasks.filter(task => task.type === 'place_holder')[0].Id
 
-		// useUpdateTasksDataMutation.mutate(
-		// 	{
-		// 		Id: idOfPlaceHolder,
-		// 		order: highestTaskOrderNumber + 2,
-		// 		token: token,
-		// 	},
-		// 	{
-		// 		onSuccess: () => {},
-		// 	}
-		// )
 		updateTasksData.mutate({
 			Id: idOfPlaceHolder,
 			order: highestTaskOrderNumber + 2,
 			token: token,
 		})
-
-		// useAddTest_dataMutation.mutate(
-		// 	{
-		// 		task: 22,
-		// 		name: taskAddValue,
-		// 		value: 123,
-		// 		order: highestTaskOrderNumber + 1,
-		// 		token: token,
-		// 	},
-		// 	{
-		// 		onSuccess: () => {
-		// 			setTaskAddValue('')
-		// 		},
-		// 	}
-		// )
 	}
 
 	function handleOnDragEnd(result) {
