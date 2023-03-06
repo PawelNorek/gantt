@@ -164,6 +164,20 @@ export const deleteTasksData = async (id, token) => {
 	return await axios(config)
 }
 
+export const patchTasksDataBulk = async (data, token) => {
+	const config = {
+		method: 'PATCH',
+		url: `https://${settings.host}/api/v1/db/data/bulk/noco/p_ms46kiyconfhxk/tasks`,
+		headers: {
+			'Content-Type': 'application/json',
+			'xc-auth': token,
+		},
+		data: JSON.stringify(data),
+	}
+
+	return await axios(config)
+}
+
 export const getToken = async (email, password) => {
 	let data = JSON.stringify({
 		email,

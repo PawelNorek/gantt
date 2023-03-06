@@ -9,6 +9,7 @@ import {
 	getTaskDurationData,
 	patchTaskDurationData,
 	patchTasksData,
+	patchTasksDataBulk,
 } from '../api/dataQuery'
 
 //TODO: add select in useQuery to select data and sort before returning it to application
@@ -84,6 +85,18 @@ export const useUpdateTasksDataMutation = () => {
 
 	return useMutation(({ Id, task, name, value, order, token }) => patchTasksData(Id, task, name, value, order, token), {
 		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['tasks'] })
+		},
+	})
+}
+
+export const useUpdateTasksDataMutationBulk = () => {
+	const queryClient = useQueryClient()
+
+	return useMutation(({ data, token }) => patchTasksDataBulk(data, token), {
+		onSuccess: data => {
+			// const queryData = data.config.data
+			// queryClient.setQueryData({ queryKey: ['tasks'], queryData })
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 		},
 	})

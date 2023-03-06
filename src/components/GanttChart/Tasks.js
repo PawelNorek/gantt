@@ -13,21 +13,27 @@ import {
 	useDeleteTaskDurationDataMutation,
 	useDeleteTasksDataMutation,
 	useUpdateTasksDataMutation,
+	useUpdateTasksDataMutationBulk,
 } from '../../hooks/queryHooks'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function Tasks({ tasks, taskDurations, token }) {
 	const inputRef = useRef([])
 	const indexRef = useRef(null)
 
+	const queryClient = useQueryClient()
+
 	const [taskAddValue, setTaskAddValue] = useState('')
 
-	const updateTasksData = useUpdateTasksDataMutation()
+	const { mutate: updateTasksData } = useUpdateTasksDataMutation()
 
-	const addTasksData = useAddTasksDataMutation()
+	const { mutate: updataTasksDataBulk } = useUpdateTasksDataMutationBulk()
 
-	const deleteTasksData = useDeleteTasksDataMutation()
+	const { mutate: addTasksData } = useAddTasksDataMutation()
 
-	const deleteTaskDurationData = useDeleteTaskDurationDataMutation()
+	const { mutate: deleteTasksData } = useDeleteTasksDataMutation()
+
+	const { mutate: deleteTaskDurationData } = useDeleteTaskDurationDataMutation()
 
 	function handleDelete(e) {
 		const idNum = parseInt(e.target.getAttribute('data-task-id'))
@@ -50,7 +56,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 			})
 		}
 
-		deleteTasksData.mutate({
+		deleteTasksData({
 			Id: idNum,
 			token: token,
 		})
@@ -62,7 +68,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 			...tasks.filter(task => task.type !== 'place_holder').map(task => task.order)
 		)
 
-		addTasksData.mutate(
+		addTasksData(
 			{
 				task: 22,
 				name: taskAddValue,
@@ -80,7 +86,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 		toast.info('Task added')
 		const idOfPlaceHolder = tasks.filter(task => task.type === 'place_holder')[0].Id
 
-		updateTasksData.mutate({
+		updateTasksData({
 			Id: idOfPlaceHolder,
 			order: highestTaskOrderNumber + 2,
 			token: token,
@@ -99,11 +105,16 @@ export default function Tasks({ tasks, taskDurations, token }) {
 		tasksTemporary.splice(result.destination.index, 0, reorderedItem)
 
 		let order = 0
+		const tempArray = []
 
-		tasksTemporary.map(task => {
+		tasksTemporary.forEach(task => {
 			order += 1
-			return (task.order = order)
+			tempArray.push({ Id: task.Id, order })
 		})
+
+		queryClient.setQueryData({ queryKey: ['tasks'], tempArray })
+
+		updataTasksDataBulk({ data: tempArray, token })
 
 		console.log('reordered:', reorderedItem)
 		console.log('Tasks temporary:', tasksTemporary)
@@ -119,7 +130,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 
 		if (event.key === 'Enter') {
 			if (cellType === 'data') {
-				updateTasksData.mutate({
+				updateTasksData({
 					Id: idNum,
 					name: value,
 					token: token,
