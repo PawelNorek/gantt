@@ -50,7 +50,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 		const taskDurationToBeDel = taskDurations.filter(row => row.task === taskToBeDel_task)
 
 		if (taskDurationToBeDel.length !== 0) {
-			deleteTaskDurationData.mutate({
+			deleteTaskDurationData({
 				Id: taskDurationToBeDel[0].Id,
 				token: token,
 			})
@@ -98,7 +98,7 @@ export default function Tasks({ tasks, taskDurations, token }) {
 
 		//TODO Here we need to update position values on the list
 
-		console.log('Result:', result)
+		// console.log('Result:', result)
 		const tasksTemporary = [...tasks]
 
 		const [reorderedItem] = tasksTemporary.splice(result.source.index, 1)
@@ -112,12 +112,17 @@ export default function Tasks({ tasks, taskDurations, token }) {
 			tempArray.push({ Id: task.Id, order })
 		})
 
-		queryClient.setQueryData({ queryKey: ['tasks'], tempArray })
+		queryClient.setQueryData({ queryKey: ['tasks', tasks.value], tasksTemporary })
+
+		// queryClient.setQueryData(old => [
+		// 	...old,
+		// 	tasksTemporary.map(task => (task.Id === 334 ? (task.order = 125) : task.order)),
+		// ])
 
 		updataTasksDataBulk({ data: tempArray, token })
 
-		console.log('reordered:', reorderedItem)
-		console.log('Tasks temporary:', tasksTemporary)
+		// console.log('reordered:', reorderedItem)
+		// console.log('Tasks temporary:', tasksTemporary)
 	}
 
 	function handelOnKeyDown(event, cellType) {

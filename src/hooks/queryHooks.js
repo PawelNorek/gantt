@@ -13,6 +13,7 @@ import {
 } from '../api/dataQuery'
 
 //TODO: add select in useQuery to select data and sort before returning it to application
+//TODO: possibly add setQueryData in mutating bulk operation to prevent poor user experience
 
 export const useTasksDataQuery = token =>
 	useQuery({
@@ -95,8 +96,6 @@ export const useUpdateTasksDataMutationBulk = () => {
 
 	return useMutation(({ data, token }) => patchTasksDataBulk(data, token), {
 		onSuccess: data => {
-			// const queryData = data.config.data
-			// queryClient.setQueryData({ queryKey: ['tasks'], queryData })
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 		},
 	})
