@@ -8,7 +8,7 @@ export default function AddTaskDuration({ tasks, token }) {
 	const [startDate, setStartDate] = useState('2022-01-01')
 	const [endDate, setEndDate] = useState('2022-01-03')
 
-	const addTaskDuration = useAddTaskDurationDataMutation()
+	const { mutate: addTaskDuration } = useAddTaskDurationDataMutation()
 
 	function onChange(e) {
 		const { value, id } = e.target
@@ -29,7 +29,7 @@ export default function AddTaskDuration({ tasks, token }) {
 
 		if (task === '') return
 
-		addTaskDuration.mutate({
+		addTaskDuration({
 			task: parseInt(task),
 			start: startDate,
 			end: endDate,

@@ -33,7 +33,7 @@ export default function GanttChart({ token, setToken }) {
 		}
 	}, [setToken])
 
-	let setTaskDurations = ''
+	// let setTaskDurations = ''
 
 	const {
 		data: taskDurations,
@@ -66,7 +66,7 @@ export default function GanttChart({ token, setToken }) {
 					</Grid>
 					<Settings>
 						{/* <AddTask setTasks={setTasks} /> */}
-						<AddTaskDuration tasks={tasks.list} setTaskDurations={setTaskDurations} token={token} />
+						<AddTaskDuration tasks={tasks.list} token={token} />
 						<TimeRange timeRange={timeRange} setTimeRange={setTimeRange} />
 					</Settings>
 				</>
