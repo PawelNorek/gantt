@@ -62,68 +62,19 @@ export default function TimeTable({ timeRange, tasks, taskDurations, token }) {
 	const startDayView = new Date(startMonth)
 	const endDayView = new Date(new Date(endMonth.getFullYear(), endMonth.getMonth() + 1, 1) - 1)
 
-	// console.log(
-	// 	'TableStartDay:',
-	// 	'Year:',
-	// 	startDayView.getFullYear(),
-	// 	'Month:',
-	// 	startDayView.getMonth(),
-	// 	'Day:',
-	// 	startDayView.getDate(),
-	// 	startDayView.toLocaleDateString()
-	// )
-	// console.log(
-	// 	'TableEndDay:',
-	// 	'Year:',
-	// 	endDayView.getFullYear(),
-	// 	'Month:',
-	// 	endDayView.getMonth(),
-	// 	'Day:',
-	// 	endDayView.getDate(),
-	// 	endDayView.toLocaleDateString()
-	// )
-
-	// taskDurationsTemp.forEach(task => {
-	// 	// if (new Date(task.start).getTime() < new Date(startDay).getTime())
-	// 	// 	return (task.start = new Date(startDay).toLocaleDateString())
-	// 	// if (new Date(task.end).getTime() > new Date(endDay).getTime())
-	// 	// 	return (task.end = new Date(endDay).toLocaleDateString())
-	// 	const startDate = new Date(task.start)
-	// 	const endDate = new Date(task.end)
-	// 	console.log(
-	// 		'Task Start:',
-	// 		'Year:',
-	// 		startDate.getFullYear(),
-	// 		'Month:',
-	// 		startDate.getMonth(),
-	// 		'Day:',
-	// 		startDate.getDate(),
-	// 		startDate.toLocaleDateString()
-	// 	)
-	// 	console.log(
-	// 		'Task End:',
-	// 		'Year:',
-	// 		endDate.getFullYear(),
-	// 		'Month:',
-	// 		endDate.getMonth(),
-	// 		'Day:',
-	// 		endDate.getDate(),
-	// 		endDate.toLocaleDateString()
-	// 	)
-	// 	console.log('Compare:', 'Start day:', startDayView > startDate, 'End day:', endDayView < endDate)
-	// })
-
 	taskDurationsTemp.forEach(task => {
 		const startDate = new Date(task.start)
 		const endDate = new Date(task.end)
 
-		if (startDayView > startDate) task.start = startDayView.toLocaleDateString()
-		if (endDayView < endDate) task.end = endDayView.toLocaleDateString()
+		if (startDayView > startDate)
+			task.start = createFormattedDateFromStr(
+				startDayView.getFullYear(),
+				startDayView.getMonth() + 1,
+				startDayView.getDate()
+			)
+		if (endDayView < endDate)
+			task.end = createFormattedDateFromStr(endDayView.getFullYear(), endDayView.getMonth() + 1, endDayView.getDate())
 	})
-
-	console.log('taskDurationsTemp:', taskDurationsTemp)
-	// console.log('taskDurations:', taskDurations)
-	// console.log('tasks duration:', new Date(taskDurationsTemp[0].end).toLocaleDateString(), startDay, endDay)
 
 	let monthRows = []
 	let dayRows = []
@@ -265,13 +216,14 @@ export default function TimeTable({ timeRange, tasks, taskDurations, token }) {
 								data-date={formattedDate}
 								onMouseEnter={handleDivMouseEnter}
 								onMouseUp={e => handleMouseUp(e)}>
-								{taskDurations.map((el, i) => {
+								{taskDurationsTemp.map((el, i) => {
+									// console.log(el.start)
 									if (el?.task === task?.task && el?.start === formattedDate && el?.task !== manipulationModeOn) {
 										if (el?.parent !== null) {
 											//fills in arrow data
 											arrows.push({
 												Id: i,
-												start: `${taskDurations.filter(row => row.task === el?.parent)[0].Id}`,
+												start: `${taskDurationsTemp.filter(row => row.task === el?.parent)[0].Id}`,
 												end: `${el?.Id}`,
 											})
 										}
