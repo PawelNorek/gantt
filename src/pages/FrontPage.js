@@ -20,7 +20,9 @@ export default function FrontPage({ token, setToken }) {
 		getToken(emailValue, passwordValue)
 			.then(data => {
 				setToken(data.token)
-				document.cookie = `gantt-cookie=${data.token}; max-age=300; samesite=strict; secure`
+				console.log('token')
+				// document.cookie = `gantt-cookie=${data.token}; max-age=300; samesite=strict; secure`
+				document.cookie = `gantt-cookie=${data.token}; max-age=300;`
 			})
 			.catch(data => console.log('error:', data))
 	}
