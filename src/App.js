@@ -15,11 +15,12 @@ function App() {
 					<h1>Project tracker</h1>
 					<NavLink to='/'>Front Page</NavLink>
 					{token && <NavLink to='/gantt'>Gantt Chart</NavLink>}
+					{token && <NavLink to='/gantt_weeks'>Gantt Chart Weeks</NavLink>}
 				</nav>
 				<Routes>
 					<Route path='/' element={<FrontPage token={token} setToken={setToken} />} />
 					<Route path='/gantt' element={<GanttChart token={token} setToken={setToken} />} />
-
+					<Route path='/gantt_weeks' element={<GanttChartWeeks token={token} setToken={setToken} />} />
 					<Route path='*' element={<Navigate to='/' replace />} />
 				</Routes>
 			</BrowserRouter>
