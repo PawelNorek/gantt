@@ -1,5 +1,6 @@
 import './App.css'
 import GanttChart from './components/GanttChart/GanttChart'
+import GanttChartWeeks from './components/GanttChartWeeks/GanttChart'
 import { BrowserRouter, Navigate, NavLink, Route, Routes } from 'react-router-dom'
 import FrontPage from './pages/FrontPage'
 import { useState } from 'react'
@@ -18,6 +19,7 @@ function App() {
 				<Routes>
 					<Route path='/' element={<FrontPage token={token} setToken={setToken} />} />
 					<Route path='/gantt' element={<GanttChart token={token} setToken={setToken} />} />
+
 					<Route path='*' element={<Navigate to='/' replace />} />
 				</Routes>
 			</BrowserRouter>
