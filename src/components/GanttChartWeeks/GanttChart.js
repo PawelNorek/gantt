@@ -7,9 +7,10 @@ import Settings from '../GanttChart/Settings'
 import Tasks from '../GanttChart/Tasks'
 import TasksData from '../GanttChart/TasksData'
 import TimeRange from '../GanttChart/TimeRange'
-import TimeTable from '../GanttChart/TimeTable'
+import TimeTable from './TimeTable'
 import { useTaskDurationDataQuery, useTasksDataQuery } from '../../hooks/queryHooks'
 import { useEffect } from 'react'
+import { months, getWeekDatesString } from '../../helpers/dateFunctions'
 
 export default function GanttChart({ token, setToken }) {
 	let date = new Date()
@@ -20,6 +21,19 @@ export default function GanttChart({ token, setToken }) {
 		toSelectMonth: date.getMonth() + 2,
 		toSelectYear: date.getFullYear(),
 	})
+
+	const [weeksTable, setWeeksTable] = useState([])
+
+	useEffect(() => {
+		const tempWeeksTable = []
+		let weekString = ''
+		const dateYear = new Date().getFullYear()
+		for (let i = 1; i < 55; i++) {
+			weekString = getWeekDatesString(i, dateYear, 5)
+			tempWeeksTable.push({ week: i, month: months[Number(weekString.slice(2, 4)) - 1], weekString: weekString })
+		}
+		setWeeksTable(tempWeeksTable)
+	}, [])
 
 	const { data: tasks, isLoading: isPendingTasks, error: errorTasks } = useTasksDataQuery(token)
 
@@ -58,17 +72,18 @@ export default function GanttChart({ token, setToken }) {
 						/>
 						<TasksData tasks={tasks.list.sort((a, b) => (a.order > b.order ? 1 : -1))} />
 						<TimeTable
+							weeksTable={weeksTable}
 							timeRange={timeRange}
 							tasks={tasks.list.sort((a, b) => (a.order > b.order ? 1 : -1))}
 							taskDurations={taskDurations.list}
 							token={token}
 						/>
 					</Grid>
-					<Settings>
-						{/* <AddTask setTasks={setTasks} /> */}
-						<AddTaskDuration tasks={tasks.list} token={token} />
-						<TimeRange timeRange={timeRange} setTimeRange={setTimeRange} />
-					</Settings>
+					{/* <Settings> */}
+					{/* <AddTask setTasks={setTasks} /> */}
+					{/* <AddTaskDuration tasks={tasks.list} token={token} /> */}
+					{/* <TimeRange timeRange={timeRange} setTimeRange={setTimeRange} /> */}
+					{/* </Settings> */}
 				</>
 			)}
 		</div>
