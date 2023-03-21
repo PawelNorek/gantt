@@ -26,6 +26,7 @@
 .calculation_row {
 	height: var(--cell-height);
 	outline: 0.5px solid var(--color-outline);
+	font-size: 0.8em;
 }
 
 .left_box {

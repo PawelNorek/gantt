@@ -10,7 +10,8 @@ import TimeRange from '../GanttChart/TimeRange'
 import TimeTable from './TimeTable'
 import { useTaskDurationDataQuery, useTasksDataQuery } from '../../hooks/queryHooks'
 import { useEffect } from 'react'
-import { months, getWeekDatesString } from '../../helpers/dateFunctions'
+import { getWeekDatesString } from '../../helpers/dateFunctions'
+import { monthsPol } from '../../constants'
 
 export default function GanttChart({ token, setToken }) {
 	let date = new Date()
@@ -30,7 +31,7 @@ export default function GanttChart({ token, setToken }) {
 		const dateYear = new Date().getFullYear()
 		for (let i = 1; i < 55; i++) {
 			weekString = getWeekDatesString(i, dateYear, 5)
-			tempWeeksTable.push({ week: i, month: months[Number(weekString.slice(2, 4)) - 1], weekString: weekString })
+			tempWeeksTable.push({ week: i, month: monthsPol[Number(weekString.slice(2, 4)) - 1], weekString: weekString })
 		}
 		setWeeksTable(tempWeeksTable)
 	}, [])
@@ -65,6 +66,8 @@ export default function GanttChart({ token, setToken }) {
 						Gantt Tracker
 					</h1>
 					<Grid>
+						{/* <div></div> */}
+						{/* <div></div> */}
 						<Tasks
 							tasks={tasks.list.sort((a, b) => (a.order > b.order ? 1 : -1))}
 							taskDurations={taskDurations.list}
