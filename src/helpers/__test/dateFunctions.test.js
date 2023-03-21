@@ -31,7 +31,7 @@ describe('getISOWeek', () => {
 		expect(getISOWeek(2022, 10, 27)).toEqual(43)
 	})
 
-	it('should return 1 for a date in the first week of the year', () => {
+	it('should return 52 for a date in the first week of the year', () => {
 		expect(getISOWeek(2022, 1, 1)).toEqual(52)
 	})
 
@@ -39,7 +39,7 @@ describe('getISOWeek', () => {
 		expect(getISOWeek(2021, 12, 31)).toEqual(52)
 	})
 
-	it('should return 53 for a date in the last week of a leap year', () => {
+	it('should return 52 for a date in the last week of a leap year', () => {
 		expect(getISOWeek(2024, 12, 29)).toEqual(52)
 	})
 
