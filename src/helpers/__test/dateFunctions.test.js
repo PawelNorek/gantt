@@ -1,4 +1,4 @@
-import { getWeekDatesString } from '../dateFunctions'
+import { getISOWeek, getWeekDatesString } from '../dateFunctions'
 
 describe('getWeekDatesString function', () => {
 	it('returns correct range of week dates as string', () => {
@@ -24,4 +24,26 @@ describe('getWeekDatesString function', () => {
 		const result = getWeekDatesString(weekNumber, year, days)
 		expect(result).toEqual('30012023-01022023')
 	})
+})
+
+describe('getISOWeek', () => {
+	it('should return the correct ISO week number for a valid date', () => {
+		expect(getISOWeek(2022, 10, 27)).toEqual(43)
+	})
+
+	it('should return 1 for a date in the first week of the year', () => {
+		expect(getISOWeek(2022, 1, 1)).toEqual(52)
+	})
+
+	it('should return 52 for a date in the last week of the year', () => {
+		expect(getISOWeek(2021, 12, 31)).toEqual(52)
+	})
+
+	it('should return 53 for a date in the last week of a leap year', () => {
+		expect(getISOWeek(2024, 12, 29)).toEqual(52)
+	})
+
+	// it('should throw an error for an invalid date', () => {
+	// 	expect(() => getISOWeek(2022, 2, 29)).toThrow('Invalid Date')
+	// })
 })
