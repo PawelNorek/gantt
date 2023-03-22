@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import styles from './TimeTable.module.css'
 import {
-	monthDiff,
-	getDaysInMonth,
-	getDayOfWeek,
+	// monthDiff,
+	// getDaysInMonth,
+	// getDayOfWeek,
 	createFormattedDateFromStr,
 	dayDiff,
 	getISOWeek,
+	weekDiff,
 } from '../../helpers/dateFunctions'
 import { useUpdateTaskDurationDataMutation } from '../../hooks/queryHooks'
-import { RenderArrows } from './RenderArrows'
-import { element } from 'prop-types'
+// import { RenderArrows } from './RenderArrows'
+// import { element } from 'prop-types'
 
 // export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDurations, arrows, token }) {
 export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations, token }) {
@@ -47,8 +48,8 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 	// creating rows
 	const startMonth = new Date(parseInt(timeRange.fromSelectYear), timeRange.fromSelectMonth)
 	const endMonth = new Date(parseInt(timeRange.toSelectYear), timeRange.toSelectMonth)
-	const numMonths = monthDiff(startMonth, endMonth) + 1
-	let month = new Date(startMonth)
+	// const numMonths = monthDiff(startMonth, endMonth) + 1
+	// let month = new Date(startMonth)
 
 	const [taskDurationUnderMouseid, setTaskDurationUnderMouseid] = useState(null)
 	const [manipulationModeOn, setManipulationModeOn] = useState(0)
@@ -77,11 +78,11 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 			task.end = createFormattedDateFromStr(endDayView.getFullYear(), endDayView.getMonth() + 1, endDayView.getDate())
 	})
 
-	let monthRows = []
-	let dayRows = []
-	let dayRow = []
-	let weekRows = []
-	let weekRow = []
+	// let monthRows = []
+	// let dayRows = []
+	// let dayRow = []
+	// let weekRows = []
+	// let weekRow = []
 	let taskRows = []
 	let taskRow = []
 	let incomeRow = []
@@ -225,7 +226,7 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 				// 	const curYear = mnth.getFullYear()
 				// 	const curMonth = mnth.getMonth() + 1
 				// const numDays = getDaysInMonth(curYear, curMonth)
-				const numDays = weeksTable.length
+				// const numDays = weeksTable.length
 				// console.log(weeksTable[i].week)
 
 				// for (let j = 1; j <= numDays; j++) {
@@ -266,8 +267,10 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 						onMouseUp={e => handleMouseUp(e)}>
 						{taskDurationsTemp.map((el, index) => {
 							// console.log(el.start)
-							let elSplit = el.start.split('-')
-							let elStartWeek = getISOWeek(elSplit[0], elSplit[1], elSplit[2])
+							let elStartSplit = el.start.split('-')
+							let elStartWeek = getISOWeek(elStartSplit[0], elStartSplit[1], elStartSplit[2])
+							let elEndSplit = el.end.split('-')
+							let elEndWeek = getISOWeek(elEndSplit[0], elEndSplit[1], elEndSplit[2])
 							// console.log(elStartWeek, weeksTable[i].week)
 							if (el?.task === task?.task && elStartWeek === weeksTable[i].week && el?.task !== manipulationModeOn) {
 								if (el?.parent !== null) {
@@ -285,7 +288,9 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 										tabIndex='0'
 										style={{
 											...taskDuration,
-											width: `calc(${dayDiff(el?.start, el?.end)} * 100% - 1px)`,
+											// width: `calc(${dayDiff(el?.start, el?.end)} * 100% - 1px)`,
+											width: `calc(${weekDiff(el?.start, el?.end)} * 100% - 1px)`,
+											// width: `calc(${elEndWeek - elStartWeek} * 100% - 1px)`,
 										}}
 										onKeyDown={e => deleteTaskDuration(e, el?.Id)}
 										onMouseEnter={e => {

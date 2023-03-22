@@ -11,6 +11,11 @@ export function dayDiff(startDate, endDate) {
 	const days = Math.ceil(difference / (1000 * 3600 * 24)) + 1
 	return days
 }
+export function weekDiff(startDate, endDate) {
+	const difference = new Date(endDate).getTime() - new Date(startDate).getTime()
+	const weeks = Math.ceil(difference / (1000 * 3600 * 24 * 7))
+	return weeks
+}
 
 export function getDaysInMonth(year, month) {
 	return new Date(year, month, 0).getDate()
