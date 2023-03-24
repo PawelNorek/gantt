@@ -11,6 +11,7 @@ export function dayDiff(startDate, endDate) {
 	const days = Math.ceil(difference / (1000 * 3600 * 24)) + 1
 	return days
 }
+
 export function weekDiff(startDate, endDate) {
 	const difference = new Date(endDate).getTime() - new Date(startDate).getTime()
 	const weeks = Math.ceil(difference / (1000 * 3600 * 24 * 7))
@@ -93,4 +94,18 @@ export function getISOWeek(year, month, day) {
 	let week1 = new Date(date.getFullYear(), 0, 4)
 	// Adjust to Thursday in week 1 and count number of weeks from date to week1.
 	return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + ((week1.getDay() + 6) % 7)) / 7)
+}
+
+export function getMonday(d) {
+	d = new Date(d)
+	var day = d.getDay(),
+		diff = d.getDate() - day + (day === 0 ? -6 : 1) // adjust when day is sunday
+	return new Date(d.setDate(diff))
+}
+
+export function getFriday(d) {
+	d = new Date(d)
+	var day = d.getDay(),
+		diff = d.getDate() - day + (day === 0 ? -6 : 1) + 4 // adjust when day is sunday
+	return new Date(d.setDate(diff))
 }

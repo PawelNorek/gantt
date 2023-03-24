@@ -1,4 +1,4 @@
-import { getISOWeek, getWeekDatesString } from '../dateFunctions'
+import { getFriday, getISOWeek, getMonday, getWeekDatesString, weekDiff } from '../dateFunctions'
 
 describe('getWeekDatesString function', () => {
 	it('returns correct range of week dates as string', () => {
@@ -46,4 +46,37 @@ describe('getISOWeek', () => {
 	// it('should throw an error for an invalid date', () => {
 	// 	expect(() => getISOWeek(2022, 2, 29)).toThrow('Invalid Date')
 	// })
+})
+
+describe('weekDiff', () => {
+	it('should return 1 for dates 2023-03-01 and 2023-03-02', () => {
+		expect(weekDiff('2023-03-01', '2023-03-02')).toEqual(1)
+	})
+	it('should return 2 for dates 2023-03-01 and 2023-03-09', () => {
+		expect(weekDiff('2023-03-01', '2023-03-09')).toEqual(2)
+	})
+	it('should return 4 for dates getMonday(2023-03-14) and getFriday(2023-04-03)', () => {
+		expect(weekDiff(getMonday('2023-03-14'), getFriday('2023-04-03'))).toEqual(4)
+	})
+	it('should return 5 for dates getMonday(2023-02-17) and getFriday(2023-03-15)', () => {
+		expect(weekDiff(getMonday('2023-02-17'), getFriday('2023-03-15'))).toEqual(5)
+	})
+})
+
+describe('getMonday for given date', () => {
+	it('should return 2023-03-13', () => {
+		expect(getMonday('2023-03-14')).toEqual(new Date('2023-03-13'))
+	})
+	it('should return 2023-03-01', () => {
+		expect(getMonday('2023-03-01')).toEqual(new Date('2023-02-27'))
+	})
+})
+
+describe('getFriday for given date', () => {
+	it('should return 2023-03-17', () => {
+		expect(getFriday('2023-03-14')).toEqual(new Date('2023-03-17'))
+	})
+	it('should return 2023-03-01', () => {
+		expect(getFriday('2023-03-01')).toEqual(new Date('2023-03-03'))
+	})
 })

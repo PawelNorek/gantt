@@ -6,7 +6,9 @@ import {
 	// getDayOfWeek,
 	createFormattedDateFromStr,
 	dayDiff,
+	getFriday,
 	getISOWeek,
+	getMonday,
 	weekDiff,
 } from '../../helpers/dateFunctions'
 import { useUpdateTaskDurationDataMutation } from '../../hooks/queryHooks'
@@ -61,22 +63,22 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 
 	const taskDurationsTemp = JSON.parse(JSON.stringify(taskDurations))
 
-	const startDayView = new Date(startMonth)
-	const endDayView = new Date(new Date(endMonth.getFullYear(), endMonth.getMonth() + 1, 1) - 1)
+	// const startDayView = new Date(startMonth)
+	// const endDayView = new Date(new Date(endMonth.getFullYear(), endMonth.getMonth() + 1, 1) - 1)
 
-	taskDurationsTemp.forEach(task => {
-		const startDate = new Date(task.start)
-		const endDate = new Date(task.end)
+	// taskDurationsTemp.forEach(task => {
+	// 	const startDate = new Date(task.start)
+	// 	const endDate = new Date(task.end)
 
-		if (startDayView > startDate)
-			task.start = createFormattedDateFromStr(
-				startDayView.getFullYear(),
-				startDayView.getMonth() + 1,
-				startDayView.getDate()
-			)
-		if (endDayView < endDate)
-			task.end = createFormattedDateFromStr(endDayView.getFullYear(), endDayView.getMonth() + 1, endDayView.getDate())
-	})
+	// 	if (startDayView > startDate)
+	// 		task.start = createFormattedDateFromStr(
+	// 			startDayView.getFullYear(),
+	// 			startDayView.getMonth() + 1,
+	// 			startDayView.getDate()
+	// 		)
+	// 	if (endDayView < endDate)
+	// 		task.end = createFormattedDateFromStr(endDayView.getFullYear(), endDayView.getMonth() + 1, endDayView.getDate())
+	// })
 
 	// let monthRows = []
 	// let dayRows = []
@@ -266,7 +268,6 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 						onMouseEnter={handleDivMouseEnter}
 						onMouseUp={e => handleMouseUp(e)}>
 						{taskDurationsTemp.map((el, index) => {
-							// console.log(el.start)
 							let elStartSplit = el.start.split('-')
 							let elStartWeek = getISOWeek(elStartSplit[0], elStartSplit[1], elStartSplit[2])
 							let elEndSplit = el.end.split('-')
@@ -281,6 +282,7 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 										end: `${el?.Id}`,
 									})
 								}
+
 								return (
 									<div
 										key={`${index}-${el?.Id}`}
@@ -289,7 +291,7 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 										style={{
 											...taskDuration,
 											// width: `calc(${dayDiff(el?.start, el?.end)} * 100% - 1px)`,
-											width: `calc(${weekDiff(el?.start, el?.end)} * 100% - 1px)`,
+											width: `calc(${weekDiff(getMonday(el?.start), getFriday(el?.end))} * 100% - 1px)`,
 											// width: `calc(${elEndWeek - elStartWeek} * 100% - 1px)`,
 										}}
 										onKeyDown={e => deleteTaskDuration(e, el?.Id)}
