@@ -5,9 +5,13 @@ import {
 	// getDaysInMonth,
 	// getDayOfWeek,
 	createFormattedDateFromStr,
+	createFormattedDateFromWeek_Friday,
+	createFormattedDateFromWeek_Monday,
 	dayDiff,
 	getFriday,
 	getISOWeek,
+	getISOWeekFromDate,
+	getISOWeekStartDate,
 	getMonday,
 	weekDiff,
 } from '../../helpers/dateFunctions'
@@ -134,79 +138,10 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 		)
 	})
 
-	// console.log(weeks)
-
-	// for (let i = 0; i < weeksTable.length; i++) {
-	// 	// create month rows
-	// 	monthRows.push(
-	// 		<div key={i} style={{ ...ganttTimePeriod, outline: 'none' }}>
-	// 			<span style={ganttTimePeriodSpan}>{months[month.getMonth()] + ' ' + month.getFullYear()}</span>
-	// 		</div>
-	// 	)
-
-	// 	incomeRow.push(
-	// 		<div key={i} className={styles.calculation_row}>
-	// 			Icome TBD
-	// 		</div>
-	// 	)
-	// 	plan_vs_realRow.push(
-	// 		<div key={i} className={styles.calculation_row}>
-	// 			Icome Plan vs Real TBD
-	// 		</div>
-	// 	)
-	// 	realRow.push(
-	// 		<div key={i} className={styles.calculation_row}>
-	// 			Real TBD
-	// 		</div>
-	// 	)
-	// 	incomeTotalRow.push(
-	// 		<div key={i} className={styles.calculation_row}>
-	// 			Icome total TBD
-	// 		</div>
-	// 	)
-
-	// 	// create day and week rows
-	// 	const numDays = getDaysInMonth(month.getFullYear(), month.getMonth() + 1)
-	// 	const currYear = month.getFullYear()
-	// 	const currMonth = month.getMonth() + 1
-
-	// 	for (let j = 1; j <= numDays; j++) {
-	// 		dayRow.push(
-	// 			<div key={j} style={{ ...ganttTimePeriod, outline: 'none' }}>
-	// 				<span style={ganttTimePeriodSpan}>{j}</span>
-	// 			</div>
-	// 		)
-
-	// 		// weekRow.push(
-	// 		// 	<div key={j} style={{ ...ganttTimePeriod, outline: 'none' }}>
-	// 		// 		<span style={{ ...ganttTimePeriodSpan, color: '#3E455B' }}>
-	// 		// 			{getDayOfWeek(currYear, currMonth - 1, j - 1)}
-	// 		// 		</span>
-	// 		// 	</div>
-	// 		// )
-	// 	}
-
-	// 	dayRows.push(
-	// 		<div key={i} style={{ ...ganttTimePeriod, outline: 'none' }}>
-	// 			{dayRow}
-	// 		</div>
-	// 	)
-
-	// 	weekRows.push(
-	// 		<div key={i} style={{ ...ganttTimePeriod, outline: 'none' }}>
-	// 			{weekRow}
-	// 		</div>
-	// 	)
-
-	// 	dayRow = []
-	// 	weekRow = []
-	// 	month.setMonth(month.getMonth() + 1)
-	// }
-
-	const pushRowDuringManipulation = (taskId, j, formattedDate, bkColor) => {
+	const pushRowDuringManipulation = (taskId, formattedDate, bkColor) => {
 		return (
 			<div
-				key={`${taskId}-${j}`}
+				key={`${taskId}`}
 				style={{
 					...ganttTimePeriodCell,
 					backgroundColor: bkColor,
@@ -225,109 +160,93 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 		tasks.map(task => {
 			let mnth = new Date(startMonth)
 			for (let i = 0; i < weeksTable.length; i++) {
-				// 	const curYear = mnth.getFullYear()
-				// 	const curMonth = mnth.getMonth() + 1
-				// const numDays = getDaysInMonth(curYear, curMonth)
-				// const numDays = weeksTable.length
-				// console.log(weeksTable[i].week)
+				if (manipulationModeOn === task?.task) {
+					if (
+						getISOWeekFromDate(taskData[0]) <= weeksTable[i].week &&
+						getISOWeekFromDate(taskData[1]) >= weeksTable[i].week
+					) {
+						taskRow.push(
+							//make cell grey during manipulation
+							pushRowDuringManipulation(task?.Id, weeksTable[i].week, 'rgb(200, 200, 200')
+						)
+					} else {
+						taskRow.push(
+							//make cell grey during manipulation
+							pushRowDuringManipulation(task?.Id, weeksTable[i].week, '#fff')
+						)
+					}
+				} else {
+					taskRow.push(
+						<div
+							// key={`${task.Id}-${j}`}
+							key={`${task.Id}`}
+							style={{
+								...ganttTimePeriodCell,
+								// backgroundColor: dayOfTheWeek === 'S' ? 'var(--color-tertiary)' : '#fff',
+							}}
+							data-task={task?.Id}
+							data-date={weeksTable[i].week}
+							onMouseEnter={handleDivMouseEnter}
+							onMouseUp={e => handleMouseUp(e)}>
+							{taskDurationsTemp.map((el, index) => {
+								let elStartWeek = getISOWeekFromDate(el.start)
+								let elEndWeek = getISOWeekFromDate(el.end)
+								// console.log(elStartWeek, weeksTable[i].week)
+								if (el?.task === task?.task && elStartWeek === weeksTable[i].week && el?.task !== manipulationModeOn) {
+									if (el?.parent !== null) {
+										//fills in arrow data
+										arrows.push({
+											Id: index,
+											start: `${taskDurationsTemp.filter(row => row.task === el?.parent)[0].Id}`,
+											end: `${el?.Id}`,
+										})
+									}
 
-				// for (let j = 1; j <= numDays; j++) {
-				// color weekend cells differently
-				// const dayOfTheWeek = getDayOfWeek(curYear, curMonth - 1, j - 1)
-				// add task and date data attributes
-				// const formattedDate = createFormattedDateFromStr(curYear, curMonth, j)
-
-				// if (manipulationModeOn === task?.task) {
-				// 	if (taskData[0] <= formattedDate && taskData[1] >= formattedDate) {
-				// 		taskRow.push(
-				// 			//make cell grey during manipulation
-				// 			pushRowDuringManipulation(task.Id, j, formattedDate, 'rgb(200, 200, 200')
-				// 		)
-				// 	} else {
-				// 		taskRow.push(
-				// 			//grey cell for 'S' days
-				// 			pushRowDuringManipulation(
-				// 				task.Id,
-				// 				j,
-				// 				formattedDate,
-				// 				dayOfTheWeek === 'S' ? 'var(--color-tertiary)' : '#fff'
-				// 			)
-				// 		)
-				// 	}
-				// } else {
-				taskRow.push(
-					<div
-						// key={`${task.Id}-${j}`}
-						key={`${task.Id}`}
-						style={{
-							...ganttTimePeriodCell,
-							// backgroundColor: dayOfTheWeek === 'S' ? 'var(--color-tertiary)' : '#fff',
-						}}
-						data-task={task?.Id}
-						data-date={weeksTable[i].week}
-						onMouseEnter={handleDivMouseEnter}
-						onMouseUp={e => handleMouseUp(e)}>
-						{taskDurationsTemp.map((el, index) => {
-							let elStartSplit = el.start.split('-')
-							let elStartWeek = getISOWeek(elStartSplit[0], elStartSplit[1], elStartSplit[2])
-							let elEndSplit = el.end.split('-')
-							let elEndWeek = getISOWeek(elEndSplit[0], elEndSplit[1], elEndSplit[2])
-							// console.log(elStartWeek, weeksTable[i].week)
-							if (el?.task === task?.task && elStartWeek === weeksTable[i].week && el?.task !== manipulationModeOn) {
-								if (el?.parent !== null) {
-									//fills in arrow data
-									arrows.push({
-										Id: index,
-										start: `${taskDurationsTemp.filter(row => row.task === el?.parent)[0].Id}`,
-										end: `${el?.Id}`,
-									})
+									return (
+										<div
+											key={`${index}-${el?.Id}`}
+											id={`${el?.Id}`}
+											tabIndex='0'
+											style={{
+												...taskDuration,
+												// width: `calc(${dayDiff(el?.start, el?.end)} * 100% - 1px)`,
+												width: `calc(${weekDiff(getMonday(el?.start), getFriday(el?.end))} * 100% - 1px)`,
+												// width: `calc(${elEndWeek - elStartWeek} * 100% - 1px)`,
+											}}
+											onKeyDown={e => deleteTaskDuration(e, el?.Id)}
+											onMouseEnter={e => {
+												setTaskDurationUnderMouseid(el?.task)
+											}}
+											onMouseLeave={e => {
+												setTaskDurationUnderMouseid(null)
+											}}>
+											{taskDurationUnderMouseid === el?.task && (
+												<>
+													<div
+														className={styles.left_box}
+														onMouseDown={e => {
+															setTaskData([el?.start, el?.end])
+															setLeftManipulation(true)
+															setManipulationModeOn(task?.task)
+														}}></div>
+													<div
+														className={styles.right_box}
+														onMouseDown={e => {
+															setRightManipulation(true)
+															setTaskData([el?.start, el?.end])
+															setManipulationModeOn(task?.task)
+														}}></div>
+												</>
+											)}
+										</div>
+									)
 								}
-
-								return (
-									<div
-										key={`${index}-${el?.Id}`}
-										id={`${el?.Id}`}
-										tabIndex='0'
-										style={{
-											...taskDuration,
-											// width: `calc(${dayDiff(el?.start, el?.end)} * 100% - 1px)`,
-											width: `calc(${weekDiff(getMonday(el?.start), getFriday(el?.end))} * 100% - 1px)`,
-											// width: `calc(${elEndWeek - elStartWeek} * 100% - 1px)`,
-										}}
-										onKeyDown={e => deleteTaskDuration(e, el?.Id)}
-										onMouseEnter={e => {
-											setTaskDurationUnderMouseid(el?.task)
-										}}
-										onMouseLeave={e => {
-											setTaskDurationUnderMouseid(null)
-										}}>
-										{taskDurationUnderMouseid === el?.task && (
-											<div
-												className={styles.left_box}
-												onMouseDown={e => {
-													setTaskData([el?.start, el?.end])
-													setLeftManipulation(true)
-													setManipulationModeOn(task?.task)
-												}}></div>
-										)}
-										{taskDurationUnderMouseid === el?.task && (
-											<div
-												className={styles.right_box}
-												onMouseDown={e => {
-													setRightManipulation(true)
-													setTaskData([el?.start, el?.end])
-													setManipulationModeOn(task?.task)
-												}}></div>
-										)}
-									</div>
-								)
-							}
-							return ''
-						})}
-						{/* {i === 0 && j === 1 && manipulationModeOn === 0 && <RenderArrows arrows={arrows} />} */}
-					</div>
-				)
-				// }
+								return ''
+							})}
+							{/* {i === 0 && j === 1 && manipulationModeOn === 0 && <RenderArrows arrows={arrows} />} */}
+						</div>
+					)
+				}
 				// }
 
 				taskRows.push(
@@ -374,14 +293,14 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 			const tableRowId = taskDurations.filter(taskDuration => taskDuration.task === manipulationModeOn)[0].Id
 			// update state (if data on backend - make API request to update data)
 
-			updateTaskDuration({
-				Id: tableRowId,
-				task: manipulationModeOn,
-				start: taskDuration.start,
-				end: taskDuration.end,
-				parent: taskDuration.parent,
-				token: token,
-			})
+			// updateTaskDuration({
+			// 	Id: tableRowId,
+			// 	task: manipulationModeOn,
+			// 	start: taskDuration.start,
+			// 	end: taskDuration.end,
+			// 	parent: taskDuration.parent,
+			// 	token: token,
+			// })
 
 			setManipulationModeOn(0)
 			setLeftManipulation(false)
@@ -397,11 +316,15 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 
 		const dataDate = targetCell.getAttribute('data-date')
 
-		if (rightManipulation && dataDate > taskData[0]) {
-			setTaskData([taskData[0], dataDate])
+		// console.log('handleDivMouseEnter: ', dataDate, getISOWeekFromDate(taskData[0]), getISOWeekFromDate(taskData[1]))
+
+		if (rightManipulation && dataDate > getISOWeekFromDate(taskData[0])) {
+			// console.log('right manipulation: ', createFormattedDateFromWeek_Friday(dataDate, 2023))
+			setTaskData([taskData[0], createFormattedDateFromWeek_Friday(dataDate, 2023)])
 		}
-		if (leftManipulation && dataDate < taskData[1]) {
-			setTaskData([dataDate, taskData[1]])
+		if (leftManipulation && dataDate < getISOWeekFromDate(taskData[1])) {
+			// console.log('left manipulation: ', createFormattedDateFromWeek_Monday(dataDate, 2023))
+			setTaskData([createFormattedDateFromWeek_Monday(dataDate, 2023), taskData[1]])
 		}
 	}
 
