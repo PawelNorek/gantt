@@ -279,11 +279,13 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 
 			const daysDuration = dayDiff(taskData[0], taskData[1])
 
+			console.log('handleMouseUp: ', taskData[0], taskData[1])
+
 			// get new task values
 			// get start, calc end using daysDuration - make Date objects - change taskDurations
 
-			let newEndDate = new Date(taskData[1])
-			newEndDate.setDate(newEndDate.getDate() + daysDuration - 1)
+			// let newEndDate = new Date(taskData[1])
+			// newEndDate.setDate(newEndDate.getDate() + daysDuration - 1)
 
 			// update taskDurations
 			taskDuration.task = manipulationModeOn
@@ -293,14 +295,14 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 			const tableRowId = taskDurations.filter(taskDuration => taskDuration.task === manipulationModeOn)[0].Id
 			// update state (if data on backend - make API request to update data)
 
-			// updateTaskDuration({
-			// 	Id: tableRowId,
-			// 	task: manipulationModeOn,
-			// 	start: taskDuration.start,
-			// 	end: taskDuration.end,
-			// 	parent: taskDuration.parent,
-			// 	token: token,
-			// })
+			updateTaskDuration({
+				Id: tableRowId,
+				task: manipulationModeOn,
+				start: taskDuration.start,
+				end: taskDuration.end,
+				parent: taskDuration.parent,
+				token: token,
+			})
 
 			setManipulationModeOn(0)
 			setLeftManipulation(false)

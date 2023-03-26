@@ -304,8 +304,8 @@ export default function TimeTable({ timeRange, tasks, taskDurations, token }) {
 			// get new task values
 			// get start, calc end using daysDuration - make Date objects - change taskDurations
 
-			let newEndDate = new Date(taskData[1])
-			newEndDate.setDate(newEndDate.getDate() + daysDuration - 1)
+			// let newEndDate = new Date(taskData[1])
+			// newEndDate.setDate(newEndDate.getDate() + daysDuration - 1)
 
 			// update taskDurations
 			taskDuration.task = manipulationModeOn
