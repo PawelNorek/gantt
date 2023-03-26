@@ -8,7 +8,8 @@ import Tasks from './Tasks'
 import TasksData from './TasksData'
 import TimeRange from './TimeRange'
 import TimeTable from './TimeTable'
-import { useTaskDurationDataQuery, useTasksDataQuery } from '../../hooks/queryHooks'
+import { useTasksDataQuery } from '../../hooks/queryHooksTasks'
+import { useTaskDurationDataQuery } from '../../hooks/queryHooksTaskDurations'
 import { useEffect } from 'react'
 
 export default function GanttChart({ token, setToken }) {

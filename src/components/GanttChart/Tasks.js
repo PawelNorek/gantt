@@ -10,11 +10,11 @@ import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import { StrictModeDroppable as Droppable } from '../../helpers/StrictModeDroppable'
 import {
 	useAddTasksDataMutation,
-	useDeleteTaskDurationDataMutation,
 	useDeleteTasksDataMutation,
 	useUpdateTasksDataMutation,
 	useUpdateTasksDataMutationBulk,
-} from '../../hooks/queryHooks'
+} from '../../hooks/queryHooksTasks'
+import { useDeleteTaskDurationDataMutation } from '../../hooks/queryHooksTaskDurations'
 import { useQueryClient } from '@tanstack/react-query'
 
 export default function Tasks({ tasks, taskDurations, token }) {

@@ -8,7 +8,7 @@ import {
 	dayDiff,
 } from '../../helpers/dateFunctions'
 import { months } from '../../constants'
-import { useUpdateTaskDurationDataMutation } from '../../hooks/queryHooks'
+import { useUpdateTaskDurationDataMutation } from '../../hooks/queryHooksTaskDurations'
 import { RenderArrows } from './RenderArrows'
 
 // export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDurations, arrows, token }) {

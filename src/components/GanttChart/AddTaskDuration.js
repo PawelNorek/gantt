@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAddTaskDurationDataMutation } from '../../hooks/queryHooks'
+import { useAddTaskDurationDataMutation } from '../../hooks/queryHooksTaskDurations'
 import AddButton from './AddButton'
 import styles from './AddTaskDuration.module.css'
 

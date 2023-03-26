@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { getToken } from '../api/dataQuery'
+import { getToken } from '../api/dataQueryToken'
 
 export default function FrontPage({ token, setToken }) {
 	const [emailValue, setEmailValue] = useState('')

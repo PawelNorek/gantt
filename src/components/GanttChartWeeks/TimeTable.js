@@ -15,8 +15,8 @@ import {
 	getMonday,
 	weekDiff,
 } from '../../helpers/dateFunctions'
-import { useUpdateTaskDurationDataMutation } from '../../hooks/queryHooks'
-import { RenderArrows } from './RenderArrows'
+import { useUpdateTaskDurationDataMutation } from '../../hooks/queryHooksTaskDurations'
+import { RenderArrows } from '../GanttChart/RenderArrows'
 // import { element } from 'prop-types'
 
 // export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDurations, arrows, token }) {
