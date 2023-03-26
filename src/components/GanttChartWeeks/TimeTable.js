@@ -16,11 +16,11 @@ import {
 	weekDiff,
 } from '../../helpers/dateFunctions'
 import { useUpdateTaskDurationDataMutation } from '../../hooks/queryHooks'
-// import { RenderArrows } from './RenderArrows'
+import { RenderArrows } from './RenderArrows'
 // import { element } from 'prop-types'
 
 // export default function TimeTable({ timeRange, tasks, taskDurations, setTaskDurations, arrows, token }) {
-export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations, token }) {
+export default function TimeTable({ weeksTable, tasks, taskDurations, token }) {
 	// for dynamic css styling
 	const ganttTimePeriod = {
 		display: 'grid',
@@ -52,10 +52,6 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 	}
 
 	// creating rows
-	const startMonth = new Date(parseInt(timeRange.fromSelectYear), timeRange.fromSelectMonth)
-	const endMonth = new Date(parseInt(timeRange.toSelectYear), timeRange.toSelectMonth)
-	// const numMonths = monthDiff(startMonth, endMonth) + 1
-	// let month = new Date(startMonth)
 
 	const [taskDurationUnderMouseid, setTaskDurationUnderMouseid] = useState(null)
 	const [manipulationModeOn, setManipulationModeOn] = useState(0)
@@ -84,11 +80,6 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 	// 		task.end = createFormattedDateFromStr(endDayView.getFullYear(), endDayView.getMonth() + 1, endDayView.getDate())
 	// })
 
-	// let monthRows = []
-	// let dayRows = []
-	// let dayRow = []
-	// let weekRows = []
-	// let weekRow = []
 	let taskRows = []
 	let taskRow = []
 	let incomeRow = []
@@ -158,7 +149,6 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 		const arrows = []
 		tasks.sort((a, b) => a.order - b.order)
 		tasks.map(task => {
-			let mnth = new Date(startMonth)
 			for (let i = 0; i < weeksTable.length; i++) {
 				if (manipulationModeOn === task?.task) {
 					if (
@@ -243,7 +233,7 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 								}
 								return ''
 							})}
-							{/* {i === 0 && j === 1 && manipulationModeOn === 0 && <RenderArrows arrows={arrows} />} */}
+							{i === 0 && manipulationModeOn === 0 && <RenderArrows arrows={arrows} />}
 						</div>
 					)
 				}
@@ -257,7 +247,6 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 				)
 
 				taskRow = []
-				mnth.setMonth(mnth.getMonth() + 1)
 			}
 			return ''
 		})
@@ -328,9 +317,6 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 			{weeks}
 			{months}
 			{dates}
-			{/* {monthRows} */}
-			{/* {dayRows} */}
-			{/* {weekRows} */}
 			{incomeRow}
 			{plan_vs_realRow}
 			{realRow}

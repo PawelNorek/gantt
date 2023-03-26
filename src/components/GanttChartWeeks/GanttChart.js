@@ -76,7 +76,7 @@ export default function GanttChart({ token, setToken }) {
 						<TasksData tasks={tasks.list.sort((a, b) => (a.order > b.order ? 1 : -1))} />
 						<TimeTable
 							weeksTable={weeksTable}
-							timeRange={timeRange}
+							// timeRange={timeRange}
 							tasks={tasks.list.sort((a, b) => (a.order > b.order ? 1 : -1))}
 							taskDurations={taskDurations.list}
 							token={token}
