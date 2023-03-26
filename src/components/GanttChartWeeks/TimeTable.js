@@ -150,7 +150,7 @@ export default function TimeTable({ weeksTable, tasks, taskDurations, token }) {
 		tasks.sort((a, b) => a.order - b.order)
 		tasks.map(task => {
 			for (let i = 0; i < weeksTable.length; i++) {
-				if (manipulationModeOn === task?.task) {
+				if (manipulationModeOn === task?.Id) {
 					if (
 						getISOWeekFromDate(taskData[0]) <= weeksTable[i].week &&
 						getISOWeekFromDate(taskData[1]) >= weeksTable[i].week
@@ -182,7 +182,7 @@ export default function TimeTable({ weeksTable, tasks, taskDurations, token }) {
 								let elStartWeek = getISOWeekFromDate(el.start)
 								let elEndWeek = getISOWeekFromDate(el.end)
 								// console.log(elStartWeek, weeksTable[i].week)
-								if (el?.task === task?.task && elStartWeek === weeksTable[i].week && el?.task !== manipulationModeOn) {
+								if (el?.task === task?.Id && elStartWeek === weeksTable[i].week && el?.task !== manipulationModeOn) {
 									if (el?.parent !== null) {
 										//fills in arrow data
 										arrows.push({
@@ -191,7 +191,6 @@ export default function TimeTable({ weeksTable, tasks, taskDurations, token }) {
 											end: `${el?.Id}`,
 										})
 									}
-
 									return (
 										<div
 											key={`${index}-${el?.Id}`}
@@ -217,14 +216,14 @@ export default function TimeTable({ weeksTable, tasks, taskDurations, token }) {
 														onMouseDown={e => {
 															setTaskData([el?.start, el?.end])
 															setLeftManipulation(true)
-															setManipulationModeOn(task?.task)
+															setManipulationModeOn(task?.Id)
 														}}></div>
 													<div
 														className={styles.right_box}
 														onMouseDown={e => {
 															setRightManipulation(true)
 															setTaskData([el?.start, el?.end])
-															setManipulationModeOn(task?.task)
+															setManipulationModeOn(task?.Id)
 														}}></div>
 												</>
 											)}

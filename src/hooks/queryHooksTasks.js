@@ -16,7 +16,7 @@ export const useTasksDataQuery = token =>
 export const useAddTasksDataMutation = () => {
 	const queryClient = useQueryClient()
 
-	return useMutation(({ task, name, value, order, token }) => addTasksData(task, name, value, order, token), {
+	return useMutation(({ name, value, order, token }) => addTasksData(name, value, order, token), {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 		},
@@ -26,7 +26,7 @@ export const useAddTasksDataMutation = () => {
 export const useUpdateTasksDataMutation = () => {
 	const queryClient = useQueryClient()
 
-	return useMutation(({ Id, task, name, value, order, token }) => patchTasksData(Id, task, name, value, order, token), {
+	return useMutation(({ Id, name, value, order, token }) => patchTasksData(Id, name, value, order, token), {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['tasks'] })
 		},

@@ -15,7 +15,7 @@ export const getTasksData = async token => {
 	return response.data
 }
 
-export const patchTasksData = async (id, task, name, value, order, token) => {
+export const patchTasksData = async (id, name, value, order, token) => {
 	const config = {
 		method: 'PATCH',
 		url: `https://${settings.host}/api/v1/db/data/noco/p_ms46kiyconfhxk/tasks/${id}`,
@@ -24,7 +24,6 @@ export const patchTasksData = async (id, task, name, value, order, token) => {
 			'xc-auth': token,
 		},
 		data: JSON.stringify({
-			task: task,
 			name: name,
 			value: value,
 			order: order,
@@ -34,7 +33,7 @@ export const patchTasksData = async (id, task, name, value, order, token) => {
 	return await axios(config)
 }
 
-export const addTasksData = async (task, name, value, order, token) => {
+export const addTasksData = async (name, value, order, token) => {
 	const config = {
 		method: 'POST',
 		url: `https://${settings.host}/api/v1/db/data/noco/p_ms46kiyconfhxk/tasks/`,
@@ -43,7 +42,6 @@ export const addTasksData = async (task, name, value, order, token) => {
 			'xc-auth': token,
 		},
 		data: JSON.stringify({
-			task: task,
 			name: name,
 			value: value,
 			order: order,

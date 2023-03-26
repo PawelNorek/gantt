@@ -187,7 +187,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, token }) {
 					// add task and date data attributes
 					const formattedDate = createFormattedDateFromStr(curYear, curMonth, j)
 
-					if (manipulationModeOn === task?.task) {
+					if (manipulationModeOn === task?.Id) {
 						if (taskData[0] <= formattedDate && taskData[1] >= formattedDate) {
 							taskRow.push(
 								//make cell grey during manipulation
@@ -218,7 +218,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, token }) {
 								onMouseUp={e => handleMouseUp(e)}>
 								{taskDurationsTemp.map((el, i) => {
 									// console.log(el.start)
-									if (el?.task === task?.task && el?.start === formattedDate && el?.task !== manipulationModeOn) {
+									if (el?.task === task?.Id && el?.start === formattedDate && el?.task !== manipulationModeOn) {
 										if (el?.parent !== null) {
 											//fills in arrow data
 											arrows.push({
@@ -249,7 +249,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, token }) {
 														onMouseDown={e => {
 															setTaskData([el?.start, el?.end])
 															setLeftManipulation(true)
-															setManipulationModeOn(task?.task)
+															setManipulationModeOn(task?.Id)
 														}}></div>
 												)}
 												{taskDurationUnderMouseid === el?.task && (
@@ -258,7 +258,7 @@ export default function TimeTable({ timeRange, tasks, taskDurations, token }) {
 														onMouseDown={e => {
 															setRightManipulation(true)
 															setTaskData([el?.start, el?.end])
-															setManipulationModeOn(task?.task)
+															setManipulationModeOn(task?.Id)
 														}}></div>
 												)}
 											</div>

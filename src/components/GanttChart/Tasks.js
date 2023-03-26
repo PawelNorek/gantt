@@ -70,7 +70,6 @@ export default function Tasks({ tasks, taskDurations, token }) {
 
 		addTasksData(
 			{
-				task: 22,
 				name: taskAddValue,
 				value: 123,
 				order: highestTaskOrderNumber + 1,
