@@ -277,9 +277,7 @@ export default function TimeTable({ weeksTable, timeRange, tasks, taskDurations,
 		if (manipulationModeOn !== 0) {
 			const taskDuration = taskDurations.filter(taskDuration => taskDuration.task === manipulationModeOn)[0]
 
-			const daysDuration = dayDiff(taskData[0], taskData[1])
-
-			console.log('handleMouseUp: ', taskData[0], taskData[1])
+			// const daysDuration = dayDiff(taskData[0], taskData[1])
 
 			// get new task values
 			// get start, calc end using daysDuration - make Date objects - change taskDurations
