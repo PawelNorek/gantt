@@ -1,17 +1,10 @@
 import { useState } from 'react'
 import styles from './TimeTable.module.css'
 import {
-	// monthDiff,
-	// getDaysInMonth,
-	// getDayOfWeek,
-	createFormattedDateFromStr,
 	createFormattedDateFromWeek_Friday,
 	createFormattedDateFromWeek_Monday,
-	dayDiff,
 	getFriday,
-	getISOWeek,
 	getISOWeekFromDate,
-	getISOWeekStartDate,
 	getMonday,
 	weekDiff,
 } from '../../helpers/dateFunctions'
@@ -180,7 +173,6 @@ export default function TimeTable({ weeksTable, tasks, taskDurations, token }) {
 							onMouseUp={e => handleMouseUp(e)}>
 							{taskDurationsTemp.map((el, index) => {
 								let elStartWeek = getISOWeekFromDate(el.start)
-								let elEndWeek = getISOWeekFromDate(el.end)
 								// console.log(elStartWeek, weeksTable[i].week)
 								if (el?.task === task?.Id && elStartWeek === weeksTable[i].week && el?.task !== manipulationModeOn) {
 									if (el?.parent !== null) {
